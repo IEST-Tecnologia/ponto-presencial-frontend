@@ -1,3 +1,10 @@
+## [1.0.2](https://github.com/IEST-Tecnologia/ponto-presencial-frontend/compare/v1.0.1...v1.0.2) (2025-11-26)
+
+
+### Bug Fixes
+
+* Fix CD ([bbad7de](https://github.com/IEST-Tecnologia/ponto-presencial-frontend/commit/bbad7de1b53580bcbfaac51be3a2577d27ac2168))
+
 ## [1.0.1](https://github.com/IEST-Tecnologia/ponto-presencial-frontend/compare/v1.0.0...v1.0.1) (2025-11-26)
 
 
