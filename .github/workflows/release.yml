@@ -24,3 +24,14 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: npx semantic-release
+      - name: Merge main back to develop
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git fetch origin main
+          git fetch origin develop
+          git checkout main
+          git pull origin main
+          git checkout develop
+          git merge main --no-ff -m "chore: sync release changes from main"
+          git push origin develop
