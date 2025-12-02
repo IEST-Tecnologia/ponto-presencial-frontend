@@ -6,6 +6,7 @@ import { registerTimeRecord } from "@/app/actions/timeRecord";
 import SpinnerIcon from "@/assets/icons/spinner.svg";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/contexts/ToastContext";
+import { validateLocation } from "@/lib/api/timeRecords";
 
 interface TimeRegisterProps {
   userName: string;
@@ -27,6 +28,37 @@ export default function TimeRegister({
   const [permissionDenied, setPermissionDenied] = useState(false);
   const [retryCount, setRetryCount] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isValid, setIsValid] = useState(false);
+  const [officeId, setOfficeId] = useState("");
+
+  useEffect(() => {
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        const { latitude, longitude, accuracy } = position.coords;
+        console.log(position)
+        const res = await validateLocation(latitude, longitude, accuracy);
+        console.log(res);
+        if (res) {
+          setIsValid(res.valid);
+          setOfficeId(res.officeId);
+        } else {
+          setIsValid(false);
+        }
+        setIsLoading(false);
+      },
+      (error) => {
+        if (error.code === error.PERMISSION_DENIED) {
+          setLocationError("Permissão de localização negada");
+          setPermissionDenied(true);
+        } else {
+          setLocationError("Erro ao obter localização");
+          setPermissionDenied(false);
+        }
+        setIsLoading(false);
+      },
+      { enableHighAccuracy: true }
+    );
+  }, []);
 
   const startWatchingLocation = useCallback(() => {
     if (!("geolocation" in navigator)) {
@@ -39,7 +71,7 @@ export default function TimeRegister({
     setLocationError(null);
 
     const watchId = navigator.geolocation.watchPosition(
-      (position) => {
+      async (position) => {
         const { latitude, longitude, accuracy } = position.coords;
         const result = isWithinRadius(latitude, longitude, accuracy);
         setLocationResult({
@@ -156,7 +188,8 @@ export default function TimeRegister({
                 Fora do raio permitido
               </h3>
               <p className="text-sm text-orange-700 mt-1">
-                Você precisa estar próximo ao local de trabalho para registrar o ponto.
+                Você precisa estar próximo ao local de trabalho para registrar o
+                ponto.
               </p>
             </div>
           </div>
