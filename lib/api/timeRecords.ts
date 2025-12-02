@@ -57,11 +57,13 @@ function dtoToTimeRecord(dto: TimeRecordDTO): TimeRecord {
 
 export async function validateLocation(
   lat: number,
-  long: number
+  long: number,
+  accuracy: number,
 ): Promise<ValidResponse | null> {
   const payload = {
     latitude: lat,
     longitude: long,
+    accuracy: accuracy,
   };
   const response = await apiFetch<ValidResponse>(
     "/timerecords/validate-location",

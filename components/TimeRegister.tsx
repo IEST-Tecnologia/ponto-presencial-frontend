@@ -34,8 +34,9 @@ export default function TimeRegister({
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(
       async (position) => {
-        const { latitude, longitude } = position.coords;
-        const res = await validateLocation(latitude, longitude);
+        const { latitude, longitude, accuracy } = position.coords;
+        console.log(position)
+        const res = await validateLocation(latitude, longitude, accuracy);
         console.log(res);
         if (res) {
           setIsValid(res.valid);
