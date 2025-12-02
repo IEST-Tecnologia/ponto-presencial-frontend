@@ -1,3 +1,17 @@
+# [1.1.0](https://github.com/IEST-Tecnologia/ponto-presencial-frontend/compare/v1.0.2...v1.1.0) (2025-12-02)
+
+
+### Bug Fixes
+
+* Teste fix [skip ci] ([8d17236](https://github.com/IEST-Tecnologia/ponto-presencial-frontend/commit/8d17236c90dfee9b4f6265b93715f131102c9490))
+
+
+### Features
+
+* add connect to backend ([246b2b7](https://github.com/IEST-Tecnologia/ponto-presencial-frontend/commit/246b2b72531847762490976f50103010e5717e4c))
+* adding accuracy and debugging ([49780f1](https://github.com/IEST-Tecnologia/ponto-presencial-frontend/commit/49780f1f8446ef96f337d098b1346331533cd048))
+* debug ([#1](https://github.com/IEST-Tecnologia/ponto-presencial-frontend/issues/1)) ([17f4b6e](https://github.com/IEST-Tecnologia/ponto-presencial-frontend/commit/17f4b6ed279be7d6eb69d19173b5044302e15fd7))
+
 ## [1.0.2](https://github.com/IEST-Tecnologia/ponto-presencial-frontend/compare/v1.0.1...v1.0.2) (2025-11-26)
 
 
