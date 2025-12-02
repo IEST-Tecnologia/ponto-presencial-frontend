@@ -16,6 +16,11 @@ interface TimeRecordDTO {
   created_at: string;
 }
 
+interface ValidResponse {
+  valid: boolean;
+  officeId: string;
+}
+
 interface PaginatedResponse<T> {
   data: T[] | null;
   page: number;
@@ -49,6 +54,27 @@ function dtoToTimeRecord(dto: TimeRecordDTO): TimeRecord {
 // ============================================================================
 // Public API
 // ============================================================================
+
+export async function validateLocation(
+  lat: number,
+  long: number
+): Promise<ValidResponse | null> {
+  const payload = {
+    latitude: lat,
+    longitude: long,
+  };
+  const response = await apiFetch<ValidResponse>(
+    "/timerecords/validate-location",
+    { method: "POST", body: JSON.stringify(payload) },
+    "Failed to validate location"
+  );
+
+  if (!response.valid) {
+    return null;
+  }
+
+  return response;
+}
 
 export async function fetchAllTimeRecords(): Promise<TimeRecord[]> {
   const response = await apiFetch<PaginatedResponse<TimeRecordDTO>>(
