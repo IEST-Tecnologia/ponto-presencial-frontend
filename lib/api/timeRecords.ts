@@ -28,6 +28,11 @@ interface PaginatedResponse<T> {
   total: number;
 }
 
+interface AttendanceResponse {
+  date: string;
+  hasAttendance: boolean
+}
+
 export interface Coordinates {
   lat: number;
   lng: number;
@@ -93,10 +98,11 @@ export async function fetchAllTimeRecords(): Promise<TimeRecord[]> {
 }
 
 export async function createTimeRecord(
-  coordinates: Coordinates
+  coordinates: Coordinates, officeId: string
 ): Promise<TimeRecord> {
   const payload = {
     coordinates,
+    officeId,
     date: new Date().toISOString(),
   };
 
@@ -115,11 +121,15 @@ export async function createTimeRecord(
 export async function hasRecordToday(): Promise<boolean> {
   const todayStr = getTodayDateString();
 
-  const response = await apiFetch<PaginatedResponse<TimeRecordDTO>>(
-    `/timerecords?startDate=${todayStr}&endDate=${todayStr}`,
+  const response = await apiFetch<AttendanceResponse>(
+    `/timerecords/check-attendance?date=${todayStr}`,
     { method: "GET" },
     "Failed to check today's records"
   );
 
-  return (response.data?.length ?? 0) > 0;
+  if (!response) {
+    return false
+  }
+
+  return response.hasAttendance;
 }

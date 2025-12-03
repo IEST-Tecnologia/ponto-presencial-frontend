@@ -20,8 +20,7 @@ export default function TimeRegister({
   const router = useRouter();
   const { showToast } = useToast();
   const [isLoading, setIsLoading] = useState(true);
-  const [locationResult, setLocationResult] = useState<
-    | (LocationCheckResult & { accuracy: number; lat: number; lng: number })
+  const [locationResult, setLocationResult] = useState<({ lat: number; lng: number })
     | null
   >(null);
   const [locationError, setLocationError] = useState<string | null>(null);
@@ -41,6 +40,10 @@ export default function TimeRegister({
         if (res) {
           setIsValid(res.valid);
           setOfficeId(res.officeId);
+          setLocationResult({
+            lat: latitude,
+            lng: longitude,
+          })
         } else {
           setIsValid(false);
         }
@@ -58,53 +61,53 @@ export default function TimeRegister({
       },
       { enableHighAccuracy: true }
     );
-  }, []);
+  }, [retryCount]);
 
-  const startWatchingLocation = useCallback(() => {
-    if (!("geolocation" in navigator)) {
-      setLocationError("Geolocalização não disponível");
-      setIsLoading(false);
-      return;
-    }
+  // const startWatchingLocation = useCallback(() => {
+  //   if (!("geolocation" in navigator)) {
+  //     setLocationError("Geolocalização não disponível");
+  //     setIsLoading(false);
+  //     return;
+  //   }
 
-    setIsLoading(true);
-    setLocationError(null);
+  //   setIsLoading(true);
+  //   setLocationError(null);
 
-    const watchId = navigator.geolocation.watchPosition(
-      async (position) => {
-        const { latitude, longitude, accuracy } = position.coords;
-        const result = isWithinRadius(latitude, longitude, accuracy);
-        setLocationResult({
-          ...result,
-          accuracy,
-          lat: latitude,
-          lng: longitude,
-        });
-        setLocationError(null);
-        setIsLoading(false);
-      },
-      (error) => {
-        if (error.code === error.PERMISSION_DENIED) {
-          setLocationError("Permissão de localização negada");
-          setPermissionDenied(true);
-        } else {
-          setLocationError("Erro ao obter localização");
-          setPermissionDenied(false);
-        }
-        setIsLoading(false);
-      },
-      { enableHighAccuracy: true }
-    );
+  //   const watchId = navigator.geolocation.watchPosition(
+  //     async (position) => {
+  //       const { latitude, longitude, accuracy } = position.coords;
+  //       const result = isWithinRadius(latitude, longitude, accuracy);
+  //       setLocationResult({
+  //         ...result,
+  //         accuracy,
+  //         lat: latitude,
+  //         lng: longitude,
+  //       });
+  //       setLocationError(null);
+  //       setIsLoading(false);
+  //     },
+  //     (error) => {
+  //       if (error.code === error.PERMISSION_DENIED) {
+  //         setLocationError("Permissão de localização negada");
+  //         setPermissionDenied(true);
+  //       } else {
+  //         setLocationError("Erro ao obter localização");
+  //         setPermissionDenied(false);
+  //       }
+  //       setIsLoading(false);
+  //     },
+  //     { enableHighAccuracy: true }
+  //   );
 
-    return watchId;
-  }, []);
+  //   return watchId;
+  // }, []);
 
-  useEffect(() => {
-    const watchId = startWatchingLocation();
-    return () => {
-      if (watchId) navigator.geolocation.clearWatch(watchId);
-    };
-  }, [startWatchingLocation, retryCount]);
+  // useEffect(() => {
+  //   const watchId = startWatchingLocation();
+  //   return () => {
+  //     if (watchId) navigator.geolocation.clearWatch(watchId);
+  //   };
+  // }, [startWatchingLocation, retryCount]);
 
   const handleRetry = () => {
     setIsLoading(true);
@@ -118,7 +121,7 @@ export default function TimeRegister({
       await registerTimeRecord({
         lat: locationResult.lat,
         lng: locationResult.lng,
-      });
+      }, officeId);
       showToast("Ponto registrado!");
       router.push("/records");
     } catch (error) {
@@ -128,7 +131,7 @@ export default function TimeRegister({
     }
   };
 
-  const isInside = locationResult?.isInside ?? false;
+  // const isInside = locationResult?.isInside ?? false;
 
   if (isLoading) {
     return (
@@ -169,7 +172,7 @@ export default function TimeRegister({
         </div>
       )}
 
-      {!isInside && !locationError && (
+      {!isValid && !locationError && (
         <div className="bg-orange-50 border border-orange-200 rounded-lg p-4 max-w-sm">
           <div className="flex items-start gap-3">
             <svg
@@ -198,9 +201,9 @@ export default function TimeRegister({
 
       <button
         onClick={handleCheckIn}
-        disabled={!isInside || isSubmitting || alreadyRegistered}
+        disabled={!isValid || isSubmitting || alreadyRegistered}
         className={`px-8 py-4 text-lg font-semibold rounded-lg transition-all ${
-          isInside && !isSubmitting && !alreadyRegistered
+          isValid && !isSubmitting && !alreadyRegistered
             ? "bg-primary text-white cursor-pointer"
             : "bg-gray-300 text-gray-500 cursor-not-allowed"
         }`}
