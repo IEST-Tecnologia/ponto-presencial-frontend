@@ -1,3 +1,11 @@
+# [1.2.0](https://github.com/IEST-Tecnologia/ponto-presencial-frontend/compare/v1.1.0...v1.2.0) (2025-12-03)
+
+
+### Features
+
+* connecting to api ([#3](https://github.com/IEST-Tecnologia/ponto-presencial-frontend/issues/3)) ([9c078d6](https://github.com/IEST-Tecnologia/ponto-presencial-frontend/commit/9c078d62878434c614d32e148ee2d5a32221ced6))
+* create timeRecord on backend ([0782056](https://github.com/IEST-Tecnologia/ponto-presencial-frontend/commit/0782056e6a394726c8b2f56069e80c04f2cd0241))
+
 # [1.1.0](https://github.com/IEST-Tecnologia/ponto-presencial-frontend/compare/v1.0.2...v1.1.0) (2025-12-02)
 
 
