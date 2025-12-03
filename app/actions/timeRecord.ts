@@ -6,8 +6,8 @@ import { revalidatePath } from "next/cache";
 export async function registerTimeRecord(coordinates: {
   lat: number;
   lng: number;
-}) {
-  const record = await createTimeRecord(coordinates);
+}, officeId: string) {
+  const record = await createTimeRecord(coordinates, officeId);
   revalidatePath("/");
   revalidatePath("/records");
   return record;
