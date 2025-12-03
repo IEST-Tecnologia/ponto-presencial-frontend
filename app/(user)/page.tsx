@@ -7,7 +7,10 @@ export default async function Home() {
   const user = await getUserInfo();
   if (!user) redirect("/login");
   const displayName =
-    user?.given_name || user?.name || user?.preferred_username || "Usuário";
+    user?.given_name ||
+    user?.name ||
+    user?.preferred_username ||
+    "Usuário teste";
   const alreadyRegistered = await hasRecordToday();
 
   return (
