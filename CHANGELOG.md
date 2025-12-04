@@ -1,3 +1,11 @@
+# [1.5.0](https://github.com/IEST-Tecnologia/ponto-presencial-frontend/compare/v1.4.0...v1.5.0) (2025-12-04)
+
+
+### Features
+
+* pass te create time record function to client server ([4ff23db](https://github.com/IEST-Tecnologia/ponto-presencial-frontend/commit/4ff23dbe316f78480f88243ae36c2ec9ee78baa3))
+* pass te create time record function to client server ([fe313e7](https://github.com/IEST-Tecnologia/ponto-presencial-frontend/commit/fe313e7cf555c94852ba95429f0afa3ba35cd3b9))
+
 # [1.4.0](https://github.com/IEST-Tecnologia/ponto-presencial-frontend/compare/v1.3.0...v1.4.0) (2025-12-04)
 
 
