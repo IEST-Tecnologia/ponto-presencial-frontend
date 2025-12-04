@@ -1,3 +1,11 @@
+# [1.3.0](https://github.com/IEST-Tecnologia/ponto-presencial-frontend/compare/v1.2.0...v1.3.0) (2025-12-04)
+
+
+### Features
+
+* send ip address to body ([90197dd](https://github.com/IEST-Tecnologia/ponto-presencial-frontend/commit/90197dd0211c06ff655d13ee4ea76c97e03c12b9))
+* send ip address to body ([7e71f3f](https://github.com/IEST-Tecnologia/ponto-presencial-frontend/commit/7e71f3ff48a013e512a6f67d2b8b566945a215d5))
+
 # [1.2.0](https://github.com/IEST-Tecnologia/ponto-presencial-frontend/compare/v1.1.0...v1.2.0) (2025-12-03)
 
 
