@@ -1,3 +1,11 @@
+# [1.4.0](https://github.com/IEST-Tecnologia/ponto-presencial-frontend/compare/v1.3.0...v1.4.0) (2025-12-04)
+
+
+### Features
+
+* adding react suspense ([44143f1](https://github.com/IEST-Tecnologia/ponto-presencial-frontend/commit/44143f148c9b959ca175eed630d8386ea6fb62d9))
+* adding react suspense ([9bbf6d9](https://github.com/IEST-Tecnologia/ponto-presencial-frontend/commit/9bbf6d9b29ada418e2e64bcf0942d9cafd0504d8))
+
 # [1.3.0](https://github.com/IEST-Tecnologia/ponto-presencial-frontend/compare/v1.2.0...v1.3.0) (2025-12-04)
 
 
