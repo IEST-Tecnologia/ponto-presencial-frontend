@@ -1,10 +1,8 @@
 "use client";
-import React, { useCallback, useEffect, useState } from "react";
-import { isWithinRadius, LocationCheckResult } from "@/utils/geo";
-import { registerTimeRecord } from "@/app/actions/timeRecord";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/contexts/ToastContext";
-import { validateLocation } from "@/lib/api/timeRecords";
+import { createTimeRecord, validateLocation } from "@/lib/api/timeRecords";
 import Loading from "./Loading";
 
 interface TimeRegisterProps {
@@ -72,13 +70,12 @@ export default function TimeRegister({
     if (!locationResult) return;
     setIsSubmitting(true);
     try {
-      await registerTimeRecord(
-        {
-          lat: locationResult.lat,
-          lng: locationResult.lng,
-        },
-        officeId
-      );
+      const coordinates = {
+        lat: locationResult.lat,
+        lng: locationResult.lng,
+      };
+      await createTimeRecord(coordinates, officeId);
+
       showToast("Ponto registrado!");
       router.push("/records");
     } catch (error) {
