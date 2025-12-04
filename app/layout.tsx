@@ -32,7 +32,7 @@ export default function RootLayout({
       >
         <ToastProvider>
           <Header />
-          <main className="flex-1 min-h-0 bg-zinc-50 overflow-y-auto flex flex-col items-center">
+          <main className="flex-1 min-h-0 h-full bg-zinc-50 overflow-y-auto flex flex-col items-center">
             {children}
           </main>
           <BottomNav />

@@ -1,12 +1,11 @@
 "use client";
 import React, { useCallback, useEffect, useState } from "react";
-import Image from "next/image";
 import { isWithinRadius, LocationCheckResult } from "@/utils/geo";
 import { registerTimeRecord } from "@/app/actions/timeRecord";
-import SpinnerIcon from "@/assets/icons/spinner.svg";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/contexts/ToastContext";
 import { validateLocation } from "@/lib/api/timeRecords";
+import Loading from "./Loading";
 
 interface TimeRegisterProps {
   userName: string;
@@ -89,20 +88,8 @@ export default function TimeRegister({
     }
   };
 
-  // const isInside = locationResult?.isInside ?? false;
-
   if (isLoading) {
-    return (
-      <div className="flex items-center justify-center flex-1">
-        <Image
-          src={SpinnerIcon}
-          alt="Loading"
-          className="animate-spin h-10 w-10 text-primary"
-          width={40}
-          height={40}
-        />
-      </div>
-    );
+    return <Loading />;
   }
 
   return (

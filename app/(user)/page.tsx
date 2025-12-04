@@ -2,8 +2,10 @@ import TimeRegister from "@/components/TimeRegister";
 import { getUserInfo } from "@/lib/auth/session";
 import { hasRecordToday } from "@/lib/api/timeRecords";
 import { redirect } from "next/navigation";
+import { Suspense } from "react";
+import Loading from "@/components/Loading";
 
-export default async function Home() {
+async function TimeRegisterWrapper() {
   const user = await getUserInfo();
   if (!user) redirect("/login");
   const displayName =
@@ -18,5 +20,13 @@ export default async function Home() {
       userName={displayName}
       alreadyRegistered={alreadyRegistered}
     />
+  );
+}
+
+export default function Home() {
+  return (
+    <Suspense fallback={<Loading />}>
+      <TimeRegisterWrapper />
+    </Suspense>
   );
 }
