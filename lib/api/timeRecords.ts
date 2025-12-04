@@ -109,6 +109,8 @@ export async function validateLocation(
   // Fetch user IP from external services
   const ip = await getUserIp();
 
+  console.log(typeof window !== undefined);
+
   const payload = {
     latitude: lat,
     longitude: long,
@@ -148,6 +150,8 @@ export async function createTimeRecord(
   officeId: string
 ): Promise<TimeRecord> {
   const ip = await getUserIp();
+
+  console.log(typeof window !== undefined);
 
   const payload = {
     coordinates,
