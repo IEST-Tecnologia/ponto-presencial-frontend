@@ -20,9 +20,10 @@ export default function TimeRegister({
   const router = useRouter();
   const { showToast } = useToast();
   const [isLoading, setIsLoading] = useState(true);
-  const [locationResult, setLocationResult] = useState<({ lat: number; lng: number })
-    | null
-  >(null);
+  const [locationResult, setLocationResult] = useState<{
+    lat: number;
+    lng: number;
+  } | null>(null);
   const [locationError, setLocationError] = useState<string | null>(null);
   const [permissionDenied, setPermissionDenied] = useState(false);
   const [retryCount, setRetryCount] = useState(0);
@@ -34,7 +35,7 @@ export default function TimeRegister({
     navigator.geolocation.getCurrentPosition(
       async (position) => {
         const { latitude, longitude, accuracy } = position.coords;
-        console.log(position)
+        console.log(position);
         const res = await validateLocation(latitude, longitude, accuracy);
         console.log(res);
         if (res) {
@@ -43,7 +44,7 @@ export default function TimeRegister({
           setLocationResult({
             lat: latitude,
             lng: longitude,
-          })
+          });
         } else {
           setIsValid(false);
         }
@@ -63,52 +64,6 @@ export default function TimeRegister({
     );
   }, [retryCount]);
 
-  // const startWatchingLocation = useCallback(() => {
-  //   if (!("geolocation" in navigator)) {
-  //     setLocationError("Geolocalização não disponível");
-  //     setIsLoading(false);
-  //     return;
-  //   }
-
-  //   setIsLoading(true);
-  //   setLocationError(null);
-
-  //   const watchId = navigator.geolocation.watchPosition(
-  //     async (position) => {
-  //       const { latitude, longitude, accuracy } = position.coords;
-  //       const result = isWithinRadius(latitude, longitude, accuracy);
-  //       setLocationResult({
-  //         ...result,
-  //         accuracy,
-  //         lat: latitude,
-  //         lng: longitude,
-  //       });
-  //       setLocationError(null);
-  //       setIsLoading(false);
-  //     },
-  //     (error) => {
-  //       if (error.code === error.PERMISSION_DENIED) {
-  //         setLocationError("Permissão de localização negada");
-  //         setPermissionDenied(true);
-  //       } else {
-  //         setLocationError("Erro ao obter localização");
-  //         setPermissionDenied(false);
-  //       }
-  //       setIsLoading(false);
-  //     },
-  //     { enableHighAccuracy: true }
-  //   );
-
-  //   return watchId;
-  // }, []);
-
-  // useEffect(() => {
-  //   const watchId = startWatchingLocation();
-  //   return () => {
-  //     if (watchId) navigator.geolocation.clearWatch(watchId);
-  //   };
-  // }, [startWatchingLocation, retryCount]);
-
   const handleRetry = () => {
     setIsLoading(true);
     setRetryCount((c) => c + 1);
@@ -118,10 +73,13 @@ export default function TimeRegister({
     if (!locationResult) return;
     setIsSubmitting(true);
     try {
-      await registerTimeRecord({
-        lat: locationResult.lat,
-        lng: locationResult.lng,
-      }, officeId);
+      await registerTimeRecord(
+        {
+          lat: locationResult.lat,
+          lng: locationResult.lng,
+        },
+        officeId
+      );
       showToast("Ponto registrado!");
       router.push("/records");
     } catch (error) {

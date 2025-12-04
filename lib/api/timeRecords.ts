@@ -56,6 +56,47 @@ function dtoToTimeRecord(dto: TimeRecordDTO): TimeRecord {
   };
 }
 
+/**
+ * Fetches user IP from multiple external services for reliability
+ * Tries services in order and returns the first successful result
+ */
+async function getUserIp(): Promise<string | null> {
+  const IP_SERVICES = [
+    { url: "https://api.ipify.org?format=json", field: "ip" },
+    { url: "https://api.my-ip.io/v2/ip.json", field: "ip" },
+    { url: "https://ipapi.co/json/", field: "ip" },
+  ];
+
+  for (const service of IP_SERVICES) {
+    try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 3000); // 3s timeout
+
+      const response = await fetch(service.url, {
+        signal: controller.signal,
+        cache: "no-store",
+      });
+
+      clearTimeout(timeoutId);
+
+      if (response.ok) {
+        const data = await response.json();
+        const ip = data[service.field];
+        if (ip) {
+          console.log(`IP fetched from ${service.url}:`, ip);
+          return ip;
+        }
+      }
+    } catch (error) {
+      console.warn(`Failed to fetch IP from ${service.url}:`, error);
+      continue; // Try next service
+    }
+  }
+
+  console.error("All IP services failed");
+  return null;
+}
+
 // ============================================================================
 // Public API
 // ============================================================================
@@ -65,11 +106,16 @@ export async function validateLocation(
   long: number,
   accuracy: number,
 ): Promise<ValidResponse | null> {
+  // Fetch user IP from external services
+  const ip = await getUserIp();
+
   const payload = {
     latitude: lat,
     longitude: long,
     accuracy: accuracy,
+    ip: ip || undefined, // Include IP if available, otherwise omit
   };
+
   const response = await apiFetch<ValidResponse>(
     "/timerecords/validate-location",
     { method: "POST", body: JSON.stringify(payload) },
