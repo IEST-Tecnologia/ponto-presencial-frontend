@@ -30,7 +30,7 @@ interface PaginatedResponse<T> {
 
 interface AttendanceResponse {
   date: string;
-  hasAttendance: boolean
+  hasAttendance: boolean;
 }
 
 export interface Coordinates {
@@ -104,7 +104,7 @@ async function getUserIp(): Promise<string | null> {
 export async function validateLocation(
   lat: number,
   long: number,
-  accuracy: number,
+  accuracy: number
 ): Promise<ValidResponse | null> {
   // Fetch user IP from external services
   const ip = await getUserIp();
@@ -144,12 +144,16 @@ export async function fetchAllTimeRecords(): Promise<TimeRecord[]> {
 }
 
 export async function createTimeRecord(
-  coordinates: Coordinates, officeId: string
+  coordinates: Coordinates,
+  officeId: string
 ): Promise<TimeRecord> {
+  const ip = await getUserIp();
+
   const payload = {
     coordinates,
     officeId,
     date: new Date().toISOString(),
+    ip: ip || undefined,
   };
 
   const data = await apiFetch<TimeRecordDTO>(
@@ -174,7 +178,7 @@ export async function hasRecordToday(): Promise<boolean> {
   );
 
   if (!response) {
-    return false
+    return false;
   }
 
   return response.hasAttendance;

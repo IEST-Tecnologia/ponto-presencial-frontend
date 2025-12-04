@@ -9,5 +9,7 @@ export default async function UserLayout({
 }>) {
   const currentUser = await getCurrentUser();
   if (!currentUser) redirect("/login");
-  return <div className="flex flex-col w-full bg-zinc-50">{children}</div>;
+  return (
+    <div className="flex flex-col w-full bg-zinc-50 h-full">{children}</div>
+  );
 }
