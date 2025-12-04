@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/contexts/ToastContext";
 import { createTimeRecord, validateLocation } from "@/lib/api/timeRecords";
+import { downloadAttendanceReport } from "@/lib/api/reports";
 import Loading from "./Loading";
 
 interface TimeRegisterProps {
@@ -85,6 +86,34 @@ export default function TimeRegister({
     }
   };
 
+  const handleDownloadReport = async () => {
+    try {
+      const result = await downloadAttendanceReport("2025-12-01", "2025-12-04");
+
+      if (!result.success || !result.data) {
+        showToast(result.error || "Erro ao baixar relatório", "error");
+        return;
+      }
+
+      // Create a download link and trigger download
+      const url = window.URL.createObjectURL(result.data);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = result.filename || "relatorio-presenca.xlsx";
+      document.body.appendChild(link);
+      link.click();
+
+      // Cleanup
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+
+      showToast("Relatório baixado com sucesso!");
+    } catch (error) {
+      console.error("Failed to download report:", error);
+      showToast("Erro ao baixar relatório", "error");
+    }
+  };
+
   if (isLoading) {
     return <Loading />;
   }
@@ -155,6 +184,14 @@ export default function TimeRegister({
           : alreadyRegistered
           ? "Já registrado hoje"
           : "Registrar Ponto"}
+      </button>
+
+      {/* Test button for downloading attendance report */}
+      <button
+        onClick={handleDownloadReport}
+        className="px-6 py-2 text-sm bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-all"
+      >
+        Baixar Relatório de Teste (01-04/12)
       </button>
 
       {/* {locationResult && (
