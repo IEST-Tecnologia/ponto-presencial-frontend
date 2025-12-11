@@ -9,7 +9,14 @@ export default async function Layout({ children }: { children: ReactNode }) {
   if (currentUser) redirect("/");
   return (
     <div className="h-screen w-full overflow-y-auto px-4 lg:px-0 flex flex-col justify-center">
-      <Image className="mx-auto my-10" src={Logo} alt="logo" priority={true} />
+      <Image
+        className="mx-auto my-10"
+        width={50}
+        height={20}
+        src={Logo}
+        alt="logo"
+        priority={true}
+      />
       <div className="max-w-[480px] mx-auto mb-20 bg-white  px-4  py-6 flex flex-col items-center lg:w-1/2 lg:px-10">
         {children}
       </div>

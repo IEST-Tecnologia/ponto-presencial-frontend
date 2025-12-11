@@ -32,7 +32,7 @@ export default function BottomNav() {
           <Image
             src={ClockIcon}
             alt="Registrar"
-            className={`w-6 h-6 transition-transform duration-300 ${
+            className={`transition-transform duration-300 ${
               isRegister ? "scale-110" : ""
             }`}
             width={24}
@@ -51,7 +51,7 @@ export default function BottomNav() {
           <Image
             src={ClipboardIcon}
             alt="Histórico"
-            className={`w-6 h-6 transition-transform duration-300 ${
+            className={`transition-transform duration-300 ${
               isRecords ? "scale-110" : ""
             }`}
             width={24}
