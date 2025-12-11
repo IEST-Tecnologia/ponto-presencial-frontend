@@ -1,3 +1,12 @@
+# [1.6.0](https://github.com/IEST-Tecnologia/ponto-presencial-frontend/compare/v1.5.0...v1.6.0) (2025-12-11)
+
+
+### Features
+
+* create a button to download report ([5a7c5ad](https://github.com/IEST-Tecnologia/ponto-presencial-frontend/commit/5a7c5ad526748af4b5233d7ddad3c134fbd24a53))
+* create admin view ([724d180](https://github.com/IEST-Tecnologia/ponto-presencial-frontend/commit/724d1807ba548a26d95d315dc99247f5593bd3d4))
+* create admin view ([#7](https://github.com/IEST-Tecnologia/ponto-presencial-frontend/issues/7)) ([19dce27](https://github.com/IEST-Tecnologia/ponto-presencial-frontend/commit/19dce278d8af1d09f16d8b61af546d481666460f))
+
 # [1.5.0](https://github.com/IEST-Tecnologia/ponto-presencial-frontend/compare/v1.4.0...v1.5.0) (2025-12-04)
 
 
