@@ -1,3 +1,11 @@
+# [1.7.0](https://github.com/IEST-Tecnologia/ponto-presencial-frontend/compare/v1.6.1...v1.7.0) (2025-12-11)
+
+
+### Features
+
+* report from the 21 day of month ([0a1656d](https://github.com/IEST-Tecnologia/ponto-presencial-frontend/commit/0a1656db4ccb175dcb9d3a3e48f038ee99b68c54))
+* report from the 21 day of month ([#9](https://github.com/IEST-Tecnologia/ponto-presencial-frontend/issues/9)) ([9af579c](https://github.com/IEST-Tecnologia/ponto-presencial-frontend/commit/9af579c79b62485cef73396695575a7f452e9ac6))
+
 ## [1.6.1](https://github.com/IEST-Tecnologia/ponto-presencial-frontend/compare/v1.6.0...v1.6.1) (2025-12-11)
 
 
