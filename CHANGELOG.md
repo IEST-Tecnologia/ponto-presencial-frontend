@@ -1,3 +1,11 @@
+## [1.6.1](https://github.com/IEST-Tecnologia/ponto-presencial-frontend/compare/v1.6.0...v1.6.1) (2025-12-11)
+
+
+### Bug Fixes
+
+* next version error ([a5ebdef](https://github.com/IEST-Tecnologia/ponto-presencial-frontend/commit/a5ebdefc5034bc2d11ec1fdf93e3045c9e9d6fc0))
+* next version error ([#8](https://github.com/IEST-Tecnologia/ponto-presencial-frontend/issues/8)) ([d0497cc](https://github.com/IEST-Tecnologia/ponto-presencial-frontend/commit/d0497cc70855f778a4a2ed196f17a4d6c5b4d074))
+
 # [1.6.0](https://github.com/IEST-Tecnologia/ponto-presencial-frontend/compare/v1.5.0...v1.6.0) (2025-12-11)
 
 
