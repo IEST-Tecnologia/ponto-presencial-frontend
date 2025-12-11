@@ -5,15 +5,19 @@ import { useToast } from "@/contexts/ToastContext";
 import { createTimeRecord, validateLocation } from "@/lib/api/timeRecords";
 import { downloadAttendanceReport } from "@/lib/api/reports";
 import Loading from "./Loading";
+import DateRangePicker from "./DateRangePicker";
+import Link from "next/link";
 
 interface TimeRegisterProps {
   userName: string;
   alreadyRegistered: boolean;
+  adminPermission: boolean;
 }
 
 export default function TimeRegister({
   userName,
   alreadyRegistered,
+  adminPermission,
 }: TimeRegisterProps) {
   const router = useRouter();
   const { showToast } = useToast();
@@ -21,6 +25,7 @@ export default function TimeRegister({
   const [locationResult, setLocationResult] = useState<{
     lat: number;
     lng: number;
+    accuracy: number;
   } | null>(null);
   const [locationError, setLocationError] = useState<string | null>(null);
   const [permissionDenied, setPermissionDenied] = useState(false);
@@ -33,15 +38,14 @@ export default function TimeRegister({
     navigator.geolocation.getCurrentPosition(
       async (position) => {
         const { latitude, longitude, accuracy } = position.coords;
-        console.log(position);
         const res = await validateLocation(latitude, longitude, accuracy);
-        console.log(res);
         if (res) {
           setIsValid(res.valid);
           setOfficeId(res.officeId);
           setLocationResult({
             lat: latitude,
             lng: longitude,
+            accuracy: accuracy,
           });
         } else {
           setIsValid(false);
@@ -74,6 +78,7 @@ export default function TimeRegister({
       const coordinates = {
         lat: locationResult.lat,
         lng: locationResult.lng,
+        accuracy: locationResult.accuracy,
       };
       await createTimeRecord(coordinates, officeId);
 
@@ -86,43 +91,21 @@ export default function TimeRegister({
     }
   };
 
-  const handleDownloadReport = async () => {
-    try {
-      const result = await downloadAttendanceReport("2025-12-01", "2025-12-04");
-
-      if (!result.success || !result.data) {
-        showToast(result.error || "Erro ao baixar relatório", "error");
-        return;
-      }
-
-      // Create a download link and trigger download
-      const url = window.URL.createObjectURL(result.data);
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = result.filename || "relatorio-presenca.xlsx";
-      document.body.appendChild(link);
-      link.click();
-
-      // Cleanup
-      document.body.removeChild(link);
-      window.URL.revokeObjectURL(url);
-
-      showToast("Relatório baixado com sucesso!");
-    } catch (error) {
-      console.error("Failed to download report:", error);
-      showToast("Erro ao baixar relatório", "error");
-    }
-  };
-
   if (isLoading) {
     return <Loading />;
   }
 
   return (
     <div className="text-center space-y-6 flex-1 flex flex-col justify-center items-center">
-      <p className="text-lg text-gray-700">
-        Olá, <span className="font-semibold">{userName}</span>!
-      </p>
+      <div>
+        <p className="text-lg text-gray-700">
+          Olá, <span className="font-semibold">{userName}</span>!
+        </p>
+        <p className="text-xs text-gray-600 font-light">
+          *Recomendamos o uso do 4G/5G para <br /> uma melhor precisão da sua
+          localização.
+        </p>
+      </div>
 
       {locationError && (
         <div className="space-y-4">
@@ -185,22 +168,14 @@ export default function TimeRegister({
           ? "Já registrado hoje"
           : "Registrar Ponto"}
       </button>
-
-      {/* Test button for downloading attendance report */}
-      <button
-        onClick={handleDownloadReport}
-        className="px-6 py-2 text-sm bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-all"
-      >
-        Baixar Relatório de Teste (01-04/12)
-      </button>
-
-      {/* {locationResult && (
-        <div className="space-y-1 text-sm text-gray-600">
-          <p>Distância: {locationResult.distance.toFixed(0)}m</p>
-          <p>Precisão: ±{locationResult.accuracy.toFixed(0)}m</p>
-          <p>Raio permitido: {RADIUS}m</p>
-        </div>
-      )} */}
+      {adminPermission && (
+        <Link
+          className="text-xs text-gray-700 rounded-md py-2 px-4 border border-gray-700 hover:bg-gray-200"
+          href="/admin"
+        >
+          Gerar relatório (somente pessoas autorizadas)
+        </Link>
+      )}
     </div>
   );
 }

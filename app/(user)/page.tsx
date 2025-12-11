@@ -4,6 +4,7 @@ import { hasRecordToday } from "@/lib/api/timeRecords";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
 import Loading from "@/components/Loading";
+import { verifyUserPermission } from "@/lib/permission";
 
 async function TimeRegisterWrapper() {
   const user = await getUserInfo();
@@ -14,11 +15,13 @@ async function TimeRegisterWrapper() {
     user?.preferred_username ||
     "Usuário teste";
   const alreadyRegistered = await hasRecordToday();
+  const adminPermission = await verifyUserPermission("admin");
 
   return (
     <TimeRegister
       userName={displayName}
       alreadyRegistered={alreadyRegistered}
+      adminPermission={adminPermission}
     />
   );
 }

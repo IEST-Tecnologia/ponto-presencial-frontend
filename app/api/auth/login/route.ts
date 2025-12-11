@@ -5,7 +5,6 @@ import { getKeycloakConfig } from "@/lib/auth/config";
 export async function GET(request: NextRequest) {
   const keycloak = new KeycloakClient(getKeycloakConfig());
   const { searchParams } = new URL(request.url);
-  console.log(request.url);
 
   const returnUrl = searchParams.get("returnUrl") || "/";
 

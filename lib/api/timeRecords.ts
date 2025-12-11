@@ -36,6 +36,7 @@ interface AttendanceResponse {
 export interface Coordinates {
   lat: number;
   lng: number;
+  accuracy: number;
 }
 
 // ============================================================================
@@ -109,8 +110,6 @@ export async function validateLocation(
   // Fetch user IP from external services
   const ip = await getUserIp();
 
-  console.log(typeof window !== undefined);
-
   const payload = {
     latitude: lat,
     longitude: long,
@@ -151,10 +150,10 @@ export async function createTimeRecord(
 ): Promise<TimeRecord> {
   const ip = await getUserIp();
 
-  console.log(typeof window !== undefined);
-
   const payload = {
-    coordinates,
+    latitude: coordinates.lat,
+    longitude: coordinates.lng,
+    accuracy: coordinates.accuracy,
     officeId,
     date: new Date().toISOString(),
     ip: ip || undefined,
