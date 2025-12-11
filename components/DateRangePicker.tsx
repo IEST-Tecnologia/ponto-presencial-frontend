@@ -30,13 +30,13 @@ function getDefaultStartDate(): Date {
   const today = new Date();
   const currentDay = today.getDate();
 
-  if (currentDay <= 20) {
+  if (currentDay <= 21) {
     // Day 20 of previous month
-    const prevMonth = new Date(today.getFullYear(), today.getMonth() - 1, 20);
+    const prevMonth = new Date(today.getFullYear(), today.getMonth() - 1, 21);
     return prevMonth;
   } else {
     // Day 20 of current month
-    const currentMonth = new Date(today.getFullYear(), today.getMonth(), 20);
+    const currentMonth = new Date(today.getFullYear(), today.getMonth(), 21);
     return currentMonth;
   }
 }
