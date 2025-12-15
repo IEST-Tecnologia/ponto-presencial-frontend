@@ -1,3 +1,11 @@
+# [1.8.0](https://github.com/IEST-Tecnologia/ponto-presencial-frontend/compare/v1.7.0...v1.8.0) (2025-12-15)
+
+
+### Features
+
+* adding disclaimer ([bbefc21](https://github.com/IEST-Tecnologia/ponto-presencial-frontend/commit/bbefc2168250566aa827a0a658ae322321c32506))
+* adding disclaimer ([#10](https://github.com/IEST-Tecnologia/ponto-presencial-frontend/issues/10)) ([368e7de](https://github.com/IEST-Tecnologia/ponto-presencial-frontend/commit/368e7de58e815954356fb3c4c053cfae8e852223))
+
 # [1.7.0](https://github.com/IEST-Tecnologia/ponto-presencial-frontend/compare/v1.6.1...v1.7.0) (2025-12-11)
 
 
