@@ -15,9 +15,11 @@ export interface UserInfo {
 function parseIdToken(idToken: string): UserInfo | null {
   try {
     const payload = idToken.split(".")[1];
-    const decoded = JSON.parse(atob(payload));
+    const base64 = payload.replace(/-/g, '+').replace(/_/g, '/');
+    const decoded = JSON.parse(Buffer.from(base64, 'base64').toString('utf-8'));
     return decoded as UserInfo;
-  } catch {
+  } catch (error) {
+    console.log('failed parse', error)
     return null;
   }
 }
