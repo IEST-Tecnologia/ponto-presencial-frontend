@@ -1,3 +1,11 @@
+# [1.9.0](https://github.com/IEST-Tecnologia/ponto-presencial-frontend/compare/v1.8.0...v1.9.0) (2025-12-16)
+
+
+### Features
+
+* change atob() for buffer to decoded id_token ([#11](https://github.com/IEST-Tecnologia/ponto-presencial-frontend/issues/11)) ([3a43a83](https://github.com/IEST-Tecnologia/ponto-presencial-frontend/commit/3a43a839a4d07831da452c2b2f4a096256f60357))
+* change atob() or buffer to decoded id_token ([ee1c740](https://github.com/IEST-Tecnologia/ponto-presencial-frontend/commit/ee1c740f628981cf6dda0d1b7680d816106b2313))
+
 # [1.8.0](https://github.com/IEST-Tecnologia/ponto-presencial-frontend/compare/v1.7.0...v1.8.0) (2025-12-15)
 
 
