@@ -1,6 +1,6 @@
 import { TimeRecord } from "@/models/timeRecord";
 import { apiFetch } from "./client";
-import { getTodayDateString } from "@/utils/date";
+import { getTodayDateString, getBrasiliaISOString } from "@/utils/date";
 
 // ============================================================================
 // Types
@@ -155,7 +155,7 @@ export async function createTimeRecord(
     longitude: coordinates.lng,
     accuracy: coordinates.accuracy,
     officeId,
-    date: new Date().toISOString(),
+    date: getBrasiliaISOString(),
     ip: ip || undefined,
   };
 
