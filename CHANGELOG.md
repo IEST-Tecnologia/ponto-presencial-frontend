@@ -1,3 +1,15 @@
+# [1.10.0](https://github.com/IEST-Tecnologia/ponto-presencial-frontend/compare/v1.9.0...v1.10.0) (2025-12-18)
+
+
+### Bug Fixes
+
+* define to brazilian date ([#12](https://github.com/IEST-Tecnologia/ponto-presencial-frontend/issues/12)) ([977ca6b](https://github.com/IEST-Tecnologia/ponto-presencial-frontend/commit/977ca6bac8c72c6ed4b95864f7299d5354d99b2d))
+
+
+### Features
+
+* define to brazilian date ([6d310d4](https://github.com/IEST-Tecnologia/ponto-presencial-frontend/commit/6d310d44e5aac6b976419ef0f35a15f5efbd5d62))
+
 # [1.9.0](https://github.com/IEST-Tecnologia/ponto-presencial-frontend/compare/v1.8.0...v1.9.0) (2025-12-16)
 
 
