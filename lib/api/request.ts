@@ -11,10 +11,11 @@ interface CreateRequest {
 export interface Request {
   id: string;
   status: "pending" | "rejected" | "approved";
-  approver: string;
+  approver: string | null;
   reason: string;
   request_date: string;
   user_id: string;
+  user?: string;
   created_at: Date;
   approved_at: Date;
 }
@@ -55,4 +56,18 @@ export async function GetUserRequests(): Promise<Request[]> {
 
   revalidatePath("/solicitacoes");
   return response;
+}
+
+export async function GetGroupRequests(): Promise<Request[]> {
+  const response = await apiFetch<Request[]>(
+    "/requests/list/group",
+    {method: "GET"},
+    "Failed to get requests"
+  )
+
+  if (!response) {
+    return [];
+  }
+
+  return response
 }

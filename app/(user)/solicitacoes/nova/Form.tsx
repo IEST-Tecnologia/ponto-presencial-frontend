@@ -57,7 +57,7 @@ export default function Form({ records }: { records: TimeRecord[] }) {
         <h1 className="text-2xl font-bold text-gray-800">Nova Solicitação</h1>
         <button
           onClick={handleCancel}
-          className="text-gray-600 hover:text-gray-800 transition-colors"
+          className="text-gray-600 hover:text-gray-800 transition-colors cursor-pointer"
           disabled={isPending}
         >
           ✕
@@ -115,14 +115,14 @@ export default function Form({ records }: { records: TimeRecord[] }) {
             type="button"
             onClick={handleCancel}
             disabled={isPending}
-            className="flex-1 px-6 py-3 border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex-1 px-6 py-3 border border-gray-300 text-gray-700 font-medium rounded-lg bg-white hover:bg-gray-50 transition-colors disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed"
           >
             Cancelar
           </button>
           <button
             type="submit"
             disabled={isPending}
-            className="flex-1 px-6 py-3 bg-primary text-white font-medium rounded-lg hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+            className="flex-1 px-6 py-3 bg-primary text-white font-medium rounded-lg hover:bg-primary/90 transition-colors disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed flex items-center justify-center gap-2"
           >
             {isPending ? (
               <>
