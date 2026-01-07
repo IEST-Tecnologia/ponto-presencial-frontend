@@ -4,11 +4,13 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import ClockIcon from "@/assets/icons/clock.svg";
 import ClipboardIcon from "@/assets/icons/clipboard.svg";
+import FileArrowIcon from "@/assets/icons/file-arrow.svg";
 
 export default function BottomNav() {
   const pathname = usePathname();
   const isRegister = pathname === "/";
   const isRecords = pathname === "/records";
+  const isRequests = pathname.startsWith("/solicitacoes");
 
   return (
     <nav className="shrink-0 bg-white border-t border-gray-200 shadow-lg">
@@ -17,8 +19,8 @@ export default function BottomNav() {
         <div
           className="absolute top-0 h-0.5 bg-primary transition-all duration-300 ease-in-out"
           style={{
-            width: "50%",
-            left: isRegister ? "0%" : "50%",
+            width: "33.33%",
+            left: isRegister ? "0%" : isRecords ? "33.33%" : "66.66%",
           }}
         />
         <Link
@@ -41,7 +43,7 @@ export default function BottomNav() {
           <span className="text-xs font-medium">Registrar</span>
         </Link>
         <Link
-          href="/records"
+          href="/historico"
           className={`flex-1 py-4 flex flex-col items-center gap-1 transition-all duration-300 ${
             isRecords
               ? "text-primary scale-105"
@@ -58,6 +60,25 @@ export default function BottomNav() {
             height={24}
           />
           <span className="text-xs font-medium">Histórico</span>
+        </Link>
+        <Link
+          href="/solicitacoes"
+          className={`flex-1 py-4 flex flex-col items-center gap-1 transition-all duration-300 ${
+            isRequests
+              ? "text-primary scale-105"
+              : "text-gray-500 hover:text-gray-700"
+          }`}
+        >
+          <Image
+            src={FileArrowIcon}
+            alt="Solicitações"
+            className={`transition-transform duration-300 ${
+              isRequests ? "scale-110" : ""
+            }`}
+            width={24}
+            height={24}
+          />
+          <span className="text-xs font-medium">Solicitações</span>
         </Link>
       </div>
     </nav>

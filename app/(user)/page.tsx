@@ -18,11 +18,17 @@ async function TimeRegisterWrapper() {
   const adminPermission = await verifyUserPermission("admin");
 
   return (
-    <TimeRegister
-      userName={displayName}
-      alreadyRegistered={alreadyRegistered}
-      adminPermission={adminPermission}
-    />
+    <>
+      <TimeRegister
+        userName={displayName}
+        alreadyRegistered={alreadyRegistered}
+        adminPermission={adminPermission}
+      />
+      <p className="text-red-500 opacity-60 absolute bottom-2 text-xs text-center">
+        Aviso: Esta ferramenta destina-se exclusivamente <br />
+        ao controle de Vale-Transporte (VT).
+      </p>
+    </>
   );
 }
 
