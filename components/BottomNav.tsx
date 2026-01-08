@@ -9,8 +9,10 @@ import FileArrowIcon from "@/assets/icons/file-arrow.svg";
 export default function BottomNav() {
   const pathname = usePathname();
   const isRegister = pathname === "/";
-  const isRecords = pathname === "/records";
+  const isRecords = pathname === "/historico";
   const isRequests = pathname.startsWith("/solicitacoes");
+  console.log("records: " + isRecords);
+  console.log("requests: " + isRequests);
 
   return (
     <nav className="shrink-0 bg-white border-t border-gray-200 shadow-lg">

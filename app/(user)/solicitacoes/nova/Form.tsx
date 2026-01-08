@@ -54,7 +54,7 @@ export default function Form({ records }: { records: TimeRecord[] }) {
     router.push("/solicitacoes");
   };
   return (
-    <div className="w-full h-full flex flex-col items-center py-3 max-w-md mx-auto px-4 space-y-6">
+    <div className="w-full flex flex-col items-center py-3 max-w-md mx-auto space-y-6">
       <div className="w-full flex items-center justify-between">
         <h1 className="text-2xl font-bold text-gray-800">Nova Solicitação</h1>
         <button
@@ -71,7 +71,7 @@ export default function Form({ records }: { records: TimeRecord[] }) {
         className="space-y-6 w-full flex flex-col items-center"
       >
         <div className="w-full flex-col items-center">
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-semibold text-gray-800 mb-2">
             Selecione a data <span className="text-red-500">*</span>
           </label>
           <p className="text-xs text-gray-500 mb-3">
@@ -86,7 +86,7 @@ export default function Form({ records }: { records: TimeRecord[] }) {
         <div className="w-full flex-col items-center">
           <label
             htmlFor="reason"
-            className="block text-sm font-medium text-gray-700 mb-2"
+            className="block text-sm font-semibold text-gray-800 mb-2"
           >
             Motivo da solicitação <span className="text-red-500">*</span>
           </label>
@@ -143,7 +143,7 @@ export default function Form({ records }: { records: TimeRecord[] }) {
           Informações importantes
         </h3>
         <ul className="text-xs text-blue-800 space-y-1 list-disc list-inside">
-          <li>
+          <li className="mb-2">
             Só é possível solicitar ajustes para dias sem registro de ponto
           </li>
           <li>Sua solicitação será analisada pelo gestor responsável</li>

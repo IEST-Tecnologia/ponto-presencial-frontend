@@ -30,7 +30,7 @@ export default async function Page({
   };
 
   return (
-    <div className="w-full h-full flex flex-col items-center py-6 max-w-2xl mx-auto px-4 space-y-6">
+    <div className="w-full flex flex-col items-center py-6 max-w-2xl mx-auto space-y-6">
       <div className="w-full flex items-center justify-between">
         <Link
           href="/solicitacoes/aprovar"
@@ -39,20 +39,20 @@ export default async function Page({
           <span>←</span>
           <span className="hidden sm:inline">Voltar</span>
         </Link>
-        <h1 className="text-2xl font-bold text-gray-800">
+        <h1 className="text-xl sm:text-2xl font-bold text-gray-800 w-full">
           Detalhes da Solicitação
         </h1>
         <div className="w-20"></div>
       </div>
 
       <div
-        className={`w-full p-4 rounded-lg border-2 flex items-center justify-between ${getStatusColorClass()}`}
+        className={`w-full px-2 py-1 rounded-lg border-2 flex items-center justify-between ${getStatusColorClass()}`}
       >
         <div>
           <p className="text-sm font-semibold">Status</p>
           <p className="text-lg font-bold">{getStatusText()}</p>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1">
           <div
             className={`rounded-full h-3 w-3 ${
               isApproved
@@ -65,21 +65,21 @@ export default async function Page({
         </div>
       </div>
 
-      <div className="w-full bg-white rounded-lg shadow border border-gray-200 p-6 space-y-4">
+      <div className="w-full bg-white rounded-lg shadow border border-gray-200 p-4 space-y-4">
         <div>
-          <p className="text-sm font-semibold text-gray-500 uppercase">
+          <p className="text-sm font-semibold text-gray-800 uppercase">
             Colaborador
           </p>
-          <p className="text-gray-800 font-medium">
+          <p className="text-gray-500 font-medium text-sm">
             {request.user || request.user_id}
           </p>
         </div>
 
         <div>
-          <p className="text-sm font-semibold text-gray-500 uppercase">
+          <p className="text-sm font-semibold text-gray-800 uppercase">
             Data da solicitação
           </p>
-          <p className="text-gray-800 font-medium">
+          <p className="text-gray-500 font-medium text-sm">
             {new Date(request.created_at).toLocaleDateString("pt-BR", {
               day: "2-digit",
               month: "long",
@@ -92,10 +92,10 @@ export default async function Page({
 
         {!isPending && request.approved_at && (
           <div>
-            <p className="text-sm font-semibold text-gray-500 uppercase">
+            <p className="text-sm font-semibold text-gray-800 uppercase">
               {isApproved ? "Data de aprovação" : "Data de rejeição"}
             </p>
-            <p className="text-gray-800 font-medium">
+            <p className="text-gray-500 font-medium text-sm">
               {new Date(request.approved_at).toLocaleDateString("pt-BR", {
                 day: "2-digit",
                 month: "long",
@@ -109,10 +109,12 @@ export default async function Page({
 
         {!isPending && request.approver && (
           <div>
-            <p className="text-sm font-semibold text-gray-500 uppercase">
+            <p className="text-sm font-semibold text-gray-800 uppercase">
               Gestor responsável
             </p>
-            <p className="text-gray-800 font-medium">{request.approver}</p>
+            <p className="text-gray-500 font-medium text-sm">
+              {request.approver}
+            </p>
           </div>
         )}
       </div>
@@ -122,10 +124,12 @@ export default async function Page({
       </div>
 
       <div className="w-full bg-white rounded-lg shadow border border-gray-200 p-6">
-        <p className="text-sm font-semibold text-gray-500 uppercase mb-2">
+        <p className="text-sm font-semibold text-gray-800 uppercase mb-2">
           Motivo da solicitação
         </p>
-        <p className="text-gray-800 whitespace-pre-wrap">{request.reason}</p>
+        <p className="text-gray-500 font-medium text-sm wrap-break-word">
+          {request.reason}
+        </p>
       </div>
 
       {isPending && (

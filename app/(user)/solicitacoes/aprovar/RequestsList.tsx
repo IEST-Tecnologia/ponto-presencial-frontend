@@ -72,13 +72,13 @@ export default function RequestsList({ initialRequests }: RequestsListProps) {
   ];
 
   return (
-    <div className="w-full max-w-7xl px-4 py-6">
+    <div className="w-full max-w-7xl py-6">
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-800 mb-2">
-          Solicitações do Grupo
+        <h1 className="text-xl sm:text-2xl font-bold text-gray-800 mb-2">
+          Solicitações do departamento
         </h1>
         <p className="text-gray-600 text-sm">
-          Gerencie as solicitações dos membros do seu grupo
+          Gerencie as solicitações dos colaboradores do seu departamento
         </p>
       </div>
 
@@ -125,7 +125,7 @@ export default function RequestsList({ initialRequests }: RequestsListProps) {
                     </th>
                     <th
                       scope="col"
-                      className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider w-32"
+                      className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider w-40"
                     >
                       Dia solicitado
                     </th>
@@ -162,13 +162,13 @@ export default function RequestsList({ initialRequests }: RequestsListProps) {
                       onClick={() => handleRequestClick(solicitacao.id)}
                       className="hover:bg-gray-50 transition-colors cursor-pointer"
                     >
-                      <td className="px-6 py-4 text-gray-700 font-medium">
+                      <td className="px-6 py-4 text-gray-500 font-medium text-sm">
                         {solicitacao.user || solicitacao.user_id}
                       </td>
-                      <td className="px-6 py-4 text-gray-700 font-medium whitespace-nowrap">
+                      <td className="px-6 py-4 text-gray-500 font-medium text-sm whitespace-nowrap">
                         {formatUTCDateToBrasilia(solicitacao.request_date)}
                       </td>
-                      <td className="px-6 py-4 text-gray-600">
+                      <td className="px-6 py-4 text-gray-600 truncate max-w-xs">
                         {solicitacao.reason}
                       </td>
                       <td className="px-6 py-4">
@@ -211,10 +211,10 @@ export default function RequestsList({ initialRequests }: RequestsListProps) {
               >
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-xs text-gray-500 uppercase font-semibold">
-                      Usuário
+                    <p className="text-sm font-semibold text-gray-800 uppercase">
+                      Colaborador
                     </p>
-                    <p className="text-gray-700 font-medium">
+                    <p className="text-gray-500 font-medium text-sm">
                       {solicitacao.user || solicitacao.user_id}
                     </p>
                   </div>
@@ -224,31 +224,33 @@ export default function RequestsList({ initialRequests }: RequestsListProps) {
                         solicitacao.status
                       )}`}
                     ></div>
-                    <span className="text-sm text-gray-700 font-medium">
+                    <span className="text-gray-500 font-medium text-sm">
                       {setStatus(solicitacao.status)}
                     </span>
                   </div>
                 </div>
 
                 <div>
-                  <p className="text-xs text-gray-500 uppercase font-semibold mb-1">
+                  <p className="text-sm font-semibold text-gray-800 uppercase mb-1">
                     Dia solicitado
                   </p>
-                  <p className="text-gray-700 font-medium">
+                  <p className="text-gray-500 font-medium text-sm">
                     {formatUTCDateToBrasilia(solicitacao.request_date)}
                   </p>
                 </div>
 
                 <div>
-                  <p className="text-xs text-gray-500 uppercase font-semibold mb-1">
+                  <p className="text-sm font-semibold text-gray-800 uppercase mb-1">
                     Motivo
                   </p>
-                  <p className="text-gray-600 text-sm">{solicitacao.reason}</p>
+                  <p className="text-gray-600 text-sm truncate max-w-xs">
+                    {solicitacao.reason}
+                  </p>
                 </div>
 
                 <div className="flex justify-between gap-4 pt-2 border-t border-gray-100">
                   <div>
-                    <p className="text-xs text-gray-500 uppercase font-semibold">
+                    <p className="text-sm font-semibold text-gray-800 uppercase">
                       Criado em
                     </p>
                     <p className="text-gray-600 text-sm">
@@ -258,7 +260,7 @@ export default function RequestsList({ initialRequests }: RequestsListProps) {
                     </p>
                   </div>
                   <div className="text-right">
-                    <p className="text-xs text-gray-500 uppercase font-semibold">
+                    <p className="text-sm font-semibold text-gray-800 uppercase">
                       Aprovado por
                     </p>
                     <p className="text-gray-600 text-sm">

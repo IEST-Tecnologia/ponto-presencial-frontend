@@ -13,8 +13,8 @@ export default async function UserLayout({
   return (
     <>
       <Header />
-      <main className="flex-1 min-h-0 h-full bg-zinc-50 overflow-y-auto flex flex-col items-center">
-        <div className="flex flex-col w-full bg-zinc-50 h-full items-center justify-center relative">
+      <main className="flex-1 min-h-0 bg-zinc-50 overflow-y-auto flex flex-col items-center">
+        <div className="flex flex-col w-full bg-zinc-50 min-h-full items-center py-4 px-4 relative">
           {children}
         </div>
       </main>
