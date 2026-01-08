@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Request } from "@/lib/api/request";
+import { formatUTCDateToBrasilia } from "@/utils/date";
 
 type TabType = "all" | "pending" | "approved" | "rejected";
 
@@ -13,7 +14,6 @@ interface RequestsListProps {
 }
 
 export default function RequestsList({ initialRequests }: RequestsListProps) {
-  console.log(initialRequests)
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<TabType>("all");
   const [currentPage, setCurrentPage] = useState(0);
@@ -166,9 +166,7 @@ export default function RequestsList({ initialRequests }: RequestsListProps) {
                         {solicitacao.user || solicitacao.user_id}
                       </td>
                       <td className="px-6 py-4 text-gray-700 font-medium whitespace-nowrap">
-                        {new Date(solicitacao.request_date).toLocaleDateString(
-                          "pt-BR"
-                        )}
+                        {formatUTCDateToBrasilia(solicitacao.request_date)}
                       </td>
                       <td className="px-6 py-4 text-gray-600">
                         {solicitacao.reason}
@@ -192,7 +190,9 @@ export default function RequestsList({ initialRequests }: RequestsListProps) {
                       </td>
                       <td className="px-6 py-4 text-gray-600">
                         {solicitacao.approver || (
-                          <span className="text-gray-400 italic">Aguardando</span>
+                          <span className="text-gray-400 italic">
+                            Aguardando
+                          </span>
                         )}
                       </td>
                     </tr>
@@ -235,9 +235,7 @@ export default function RequestsList({ initialRequests }: RequestsListProps) {
                     Dia solicitado
                   </p>
                   <p className="text-gray-700 font-medium">
-                    {new Date(solicitacao.request_date).toLocaleDateString(
-                      "pt-BR"
-                    )}
+                    {formatUTCDateToBrasilia(solicitacao.request_date)}
                   </p>
                 </div>
 

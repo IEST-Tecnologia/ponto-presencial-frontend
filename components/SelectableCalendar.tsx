@@ -2,6 +2,7 @@
 
 import { TimeRecord } from "@/models/timeRecord";
 import { useState } from "react";
+import { extractDateFromUTC } from "@/utils/date";
 
 interface CalendarProps {
   records: TimeRecord[];
@@ -43,10 +44,8 @@ export default function SelectableCalendar({
 
   const recordsByDate = new Map<string, TimeRecord[]>();
   records.forEach((record) => {
-    const localDate = new Date(record.date);
-    const dateKey = `${localDate.getFullYear()}-${String(
-      localDate.getMonth() + 1
-    ).padStart(2, "0")}-${String(localDate.getDate()).padStart(2, "0")}`;
+    // Extrai a data sem problemas de timezone
+    const dateKey = extractDateFromUTC(record.date);
     if (!recordsByDate.has(dateKey)) {
       recordsByDate.set(dateKey, []);
     }
@@ -129,7 +128,8 @@ export default function SelectableCalendar({
     hasRecords: boolean
   ) => {
     if (hasRecords) return;
-    const date = new Date(y, m, day);
+    // Cria a data com horário do meio-dia para evitar problemas de timezone
+    const date = new Date(y, m, day, 12, 0, 0, 0);
     onDateSelect(date);
   };
 

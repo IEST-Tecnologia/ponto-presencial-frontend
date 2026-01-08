@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { GetUserRequests } from "@/lib/api/request";
 import { Request } from "@/lib/api/request";
+import { formatUTCDateToBrasilia } from "@/utils/date";
 
 const ITEMS_PER_PAGE = 1;
 
@@ -40,7 +41,6 @@ export default function Page() {
     async function fetchRequests() {
       setIsLoading(true);
       const req = await GetUserRequests();
-      console.log(req)
       setRequests(req);
       setIsLoading(false);
     }
@@ -110,7 +110,7 @@ export default function Page() {
                       scope="col"
                       className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider w-40"
                     >
-                      Aprovado por
+                      Gestor responsável
                     </th>
                   </tr>
                 </thead>
@@ -121,9 +121,7 @@ export default function Page() {
                       className="hover:bg-gray-50 transition-colors cursor-pointer"
                     >
                       <td className="px-6 py-4 text-gray-700 font-medium whitespace-nowrap">
-                        {new Date(solicitacao.request_date).toLocaleDateString(
-                          "pt-BR"
-                        )}
+                        {formatUTCDateToBrasilia(solicitacao.request_date)}
                       </td>
                       <td className="px-6 py-4 text-gray-600">
                         {solicitacao.reason}
@@ -147,7 +145,9 @@ export default function Page() {
                       </td>
                       <td className="px-6 py-4 text-gray-600">
                         {solicitacao.approver || (
-                          <span className="text-gray-400 italic">Aguardando</span>
+                          <span className="text-gray-400 italic">
+                            Aguardando
+                          </span>
                         )}
                       </td>
                     </tr>
@@ -170,9 +170,7 @@ export default function Page() {
                       Dia solicitado
                     </p>
                     <p className="text-gray-700 font-medium">
-                      {new Date(solicitacao.request_date).toLocaleDateString(
-                        "pt-BR"
-                      )}
+                      {formatUTCDateToBrasilia(solicitacao.request_date)}
                     </p>
                   </div>
                   <div className="flex items-center gap-2">
@@ -207,7 +205,7 @@ export default function Page() {
                   </div>
                   <div className="text-right">
                     <p className="text-xs text-gray-500 uppercase font-semibold">
-                      Aprovado por
+                      Gestor responsável
                     </p>
                     <p className="text-gray-600 text-sm">
                       {solicitacao.approver || (
