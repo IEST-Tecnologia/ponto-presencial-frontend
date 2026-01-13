@@ -2,12 +2,6 @@
 
 import { cookies } from "next/headers";
 
-interface PermissionPayload {
-  scopes: string[];
-  rsid: string;
-  rsname: string;
-}
-
 const keycloak_id = process.env.AUTH_KEYCLOAK_ID;
 const keycloak_url = process.env.NEXT_PUBLIC_AUTH_KEYCLOAK_URL;
 const keycloak_realm = process.env.NEXT_PUBLIC_AUTH_KEYCLOAK_REALM;

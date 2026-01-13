@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { GetUserRequests } from "@/lib/api/request";
 import { Request } from "@/lib/api/request";
 import { formatUTCDateToBrasilia } from "@/utils/date";
+import { verifyUserPermission } from "@/lib/permission";
 
 const ITEMS_PER_PAGE = 3;
 
@@ -12,6 +13,7 @@ export default function Page() {
   const router = useRouter();
   const [currentPage, setCurrentPage] = useState(0);
   const [requests, setRequests] = useState<Request[]>([]);
+  const [hasPermission, setHasPermission] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState(true);
 
   const totalPages = Math.ceil(requests.length / ITEMS_PER_PAGE);
@@ -38,6 +40,15 @@ export default function Page() {
   };
 
   useEffect(() => {
+    async function verifyPermission() {
+      const permission = await verifyUserPermission('request');
+      setHasPermission(permission)
+    }
+
+    verifyPermission()
+  })
+
+  useEffect(() => {
     async function fetchRequests() {
       setIsLoading(true);
       const req = await GetUserRequests();
@@ -59,15 +70,24 @@ export default function Page() {
           <p className="text-gray-700 font-semibold text-center sm:text-left">
             Acompanhe suas solicitações
           </p>
-          <button
+          <div className="flex flex-col md:flex-row gap-2">
+            <button
             onClick={handleNewRequest}
-            className="px-4 py-2 bg-primary text-white text-sm font-medium rounded-md hover:bg-primary/90 transition-colors shadow-sm w-full sm:w-auto"
+            className="px-4 py-2 bg-primary text-white text-sm font-medium rounded-md hover:bg-primary/90 transition-colors cursor-pointer shadow-sm w-full sm:w-auto"
           >
             + Nova Solicitação
           </button>
+          {hasPermission && (
+            <button
+            onClick={() => router.push("/solicitacoes/aprovar")}
+            className="px-4 py-2 bg-primary text-white text-sm cursor-pointer font-medium rounded-md hover:bg-primary/90 transition-colors shadow-sm w-full sm:w-auto"
+          >
+            Gerenciar Solicitações
+          </button>
+          )}
+          </div>
         </div>
 
-        {/* Loading State */}
         {isLoading ? (
           <div className="bg-white rounded-lg shadow-md border border-gray-200 p-12">
             <div className="flex flex-col items-center justify-center gap-3">
@@ -77,7 +97,6 @@ export default function Page() {
           </div>
         ) : currentItems.length > 0 ? (
           <>
-            {/* Desktop Table View */}
             <div className="hidden lg:block bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden">
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
@@ -163,7 +182,6 @@ export default function Page() {
               </div>
             </div>
 
-            {/* Mobile Card View */}
             <div className="lg:hidden space-y-4 w-full">
               {currentItems.map((solicitacao) => (
                 <div
@@ -234,7 +252,6 @@ export default function Page() {
           </div>
         )}
 
-        {/* Pagination */}
         {totalPages > 1 && (
           <div className="mt-4 bg-white rounded-lg shadow-md border border-gray-200 px-4 py-4 lg:px-6">
             <div className="flex justify-center items-center gap-2 sm:gap-4">

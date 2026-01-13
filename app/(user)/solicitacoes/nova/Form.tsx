@@ -38,7 +38,6 @@ export default function Form({ records }: { records: TimeRecord[] }) {
         const res = await CreateRequest(reason, dateString);
         if (res.success) {
           showToast("Solicitação criada");
-          // Redirecionar para lista de solicitações após sucesso
           router.push("/solicitacoes");
         } else if (!res.success) {
           showToast(res.errorMessage, "error");
