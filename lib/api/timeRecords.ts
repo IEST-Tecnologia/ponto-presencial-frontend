@@ -84,7 +84,6 @@ async function getUserIp(): Promise<string | null> {
         const data = await response.json();
         const ip = data[service.field];
         if (ip) {
-          console.log(`IP fetched from ${service.url}:`, ip);
           return ip;
         }
       }

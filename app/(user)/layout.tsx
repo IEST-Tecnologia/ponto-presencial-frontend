@@ -13,9 +13,8 @@ export default async function UserLayout({
   return (
     <>
       <Header />
-      <main className="flex-1 min-h-0 h-full bg-zinc-50 overflow-y-auto flex flex-col items-center">
-        <div className="flex flex-col w-full bg-zinc-50 h-full items-center justify-center relative">
-          <p className="text-red-500 opacity-60 absolute bottom-2 text-xs text-center">Aviso: Esta ferramenta destina-se exclusivamente <br />ao controle de Vale-Transporte (VT).</p>
+      <main className="flex-1 min-h-0 bg-zinc-50 overflow-y-auto flex flex-col items-center">
+        <div className="flex flex-col w-full bg-zinc-50 min-h-full items-center py-4 px-4 relative">
           {children}
         </div>
       </main>

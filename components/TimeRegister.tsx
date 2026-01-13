@@ -83,7 +83,7 @@ export default function TimeRegister({
       await createTimeRecord(coordinates, officeId);
 
       showToast("Ponto registrado!");
-      router.push("/records");
+      router.push("/historico");
     } catch (error) {
       console.error("Failed to register time record:", error);
       showToast("Erro ao registrar ponto. Tente novamente.", "error");

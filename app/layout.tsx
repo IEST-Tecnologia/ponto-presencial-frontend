@@ -26,7 +26,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="h-full overflow-hidden">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-zinc-50 h-screen w-full flex flex-col overflow-hidden`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased h-screen w-full flex flex-col overflow-hidden`}
       >
         <ToastProvider>{children}</ToastProvider>
       </body>

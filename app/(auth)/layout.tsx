@@ -17,7 +17,7 @@ export default async function Layout({ children }: { children: ReactNode }) {
         alt="logo"
         priority={true}
       />
-      <div className="max-w-[480px] mx-auto mb-20 bg-white  px-4  py-6 flex flex-col items-center lg:w-1/2 lg:px-10">
+      <div className="max-w-[480px] mx-auto mb-20 px-4  py-6 flex flex-col items-center lg:w-1/2 lg:px-10">
         {children}
       </div>
     </div>
