@@ -2,20 +2,27 @@
 
 import DateRangePicker from "@/components/DateRangePicker";
 import { useToast } from "@/contexts/ToastContext";
+import { GetValidCompanies, ResponseCompanie } from "@/lib/api/companies";
 import { downloadAttendanceReport } from "@/lib/api/reports";
 import Link from "next/link";
-import React, { useState, useTransition, useCallback } from "react";
+import React, { useState, useTransition, useCallback, useEffect } from "react";
 
 type DateProps = {
   startDate: string;
   endDate: string;
 };
 
+const ALL_COMPANIES = "all";
+
 export default function Page() {
   const [dates, setDates] = useState<DateProps>({
     startDate: "",
     endDate: "",
   });
+  const [companies, setCompanies] = useState<string[]>([]);
+  const [selectedCompany, setSelectedCompany] = useState<string>(ALL_COMPANIES);
+  console.log(selectedCompany);
+
   const [isLoading, startTransition] = useTransition();
   const { showToast } = useToast();
 
@@ -26,11 +33,24 @@ export default function Page() {
     []
   );
 
+  useEffect(() => {
+    async function fetchCompanies() {
+      const response = await GetValidCompanies();
+      setCompanies(response.data ?? []);
+    }
+
+    fetchCompanies();
+  }, []);
+
   const handleDownloadReport = async ({ startDate, endDate }: DateProps) => {
     startTransition(async () => {
       try {
         if (startDate && endDate) {
-          const result = await downloadAttendanceReport(startDate, endDate);
+          const result = await downloadAttendanceReport(
+            startDate,
+            endDate,
+            selectedCompany
+          );
 
           if (!result.success || !result.data) {
             showToast(result.error || "Erro ao baixar relatório", "error");
@@ -69,6 +89,23 @@ export default function Page() {
           ← Voltar
         </Link>
       </div>
+
+      <div className="w-full">
+        <label className="text-xs text-gray-500 block mb-1">Empresa</label>
+        <select
+          value={selectedCompany}
+          onChange={(e) => setSelectedCompany(e.target.value)}
+          className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm text-gray-700 focus:outline-none focus:border-primary focus:bg-primary/5 transition-colors bg-white"
+        >
+          <option value={ALL_COMPANIES}>Todas</option>
+          {companies.map((company) => (
+            <option key={company} value={company}>
+              {company}
+            </option>
+          ))}
+        </select>
+      </div>
+
       <DateRangePicker onRangeChange={handleRangeChange} />
       <button
         disabled={isLoading || !dates.startDate || !dates.endDate}
