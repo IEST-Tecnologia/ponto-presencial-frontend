@@ -1,9 +1,11 @@
 "use client";
 
-import React, { useState } from "react";
-import { useRouter } from "next/navigation";
+import React, { useState, useRef, useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Request } from "@/lib/api/request";
 import { formatUTCDateToBrasilia } from "@/utils/date";
+import TextInput from "@/components/TextInput";
+import DateRangePicker from "@/components/DateRangePicker";
 
 type TabType = "all" | "pending" | "approved" | "rejected";
 
@@ -15,10 +17,86 @@ interface RequestsListProps {
 
 export default function RequestsList({ initialRequests }: RequestsListProps) {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [activeTab, setActiveTab] = useState<TabType>("all");
   const [currentPage, setCurrentPage] = useState(0);
+  const [nameFilter, setNameFilter] = useState(searchParams.get("name") || "");
+  const [startDate, setStartDate] = useState(
+    searchParams.get("startDate") || ""
+  );
+  const [endDate, setEndDate] = useState(searchParams.get("endDate") || "");
+  const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
+  const datePickerRef = useRef<HTMLDivElement>(null);
 
   const requests = Array.isArray(initialRequests) ? initialRequests : [];
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        datePickerRef.current &&
+        !datePickerRef.current.contains(event.target as Node)
+      ) {
+        setIsDatePickerOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const handleFilterSubmit = () => {
+    const params = new URLSearchParams(searchParams.toString());
+
+    if (nameFilter) {
+      params.set("name", nameFilter);
+    } else {
+      params.delete("name");
+    }
+
+    if (startDate) {
+      params.set("startDate", startDate);
+    } else {
+      params.delete("startDate");
+    }
+
+    if (endDate) {
+      params.set("endDate", endDate);
+    } else {
+      params.delete("endDate");
+    }
+
+    router.push(`/solicitacoes/aprovar?${params.toString()}`);
+    setIsDatePickerOpen(false);
+  };
+
+  const handleClearFilter = () => {
+    const params = new URLSearchParams(searchParams.toString());
+    setNameFilter("");
+    setStartDate("");
+    setEndDate("");
+    params.delete("name");
+    params.delete("startDate");
+    params.delete("endDate");
+    router.push("/solicitacoes/aprovar");
+    setIsDatePickerOpen(false);
+  };
+
+  const handleRangeChange = (start: string, end: string) => {
+    setStartDate(start);
+    setEndDate(end);
+  };
+
+  const formatDateDisplay = () => {
+    if (!startDate && !endDate) return "Selecionar período";
+    if (startDate && endDate) {
+      const formatDate = (dateStr: string) => {
+        const [year, month, day] = dateStr.split("-");
+        return `${day}/${month}/${year}`;
+      };
+      return `${formatDate(startDate)} - ${formatDate(endDate)}`;
+    }
+    return "Selecionar período";
+  };
 
   const getStatusColorClass = (color: string) => {
     const colors: { [key: string]: string } = {
@@ -110,13 +188,57 @@ export default function RequestsList({ initialRequests }: RequestsListProps) {
         </div>
       </div>
 
+      <div className="bg-white rounded-lg shadow-md border border-gray-200 mb-4 p-4">
+        <div className="flex flex-col sm:flex-row gap-3 items-end">
+          <TextInput
+            className="w-full"
+            label="Filtrar por nome"
+            placeholder="Digite o nome do colaborador"
+            value={nameFilter}
+            onChange={(e) => setNameFilter(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && handleFilterSubmit()}
+          />
+          <div className="relative w-full md:flex-1" ref={datePickerRef}>
+            <label className="text-xs text-gray-500 block mb-1">Período</label>
+            <button
+              type="button"
+              onClick={() => setIsDatePickerOpen(!isDatePickerOpen)}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm text-gray-700 text-left focus:outline-none focus:border-primary focus:bg-primary/5 transition-colors"
+            >
+              {formatDateDisplay()}
+            </button>
+            {isDatePickerOpen && (
+              <div className="absolute top-full left-0 mt-2 z-50">
+                <DateRangePicker
+                  onRangeChange={handleRangeChange}
+                  initialStartDate={startDate}
+                  initialEndDate={endDate}
+                />
+              </div>
+            )}
+          </div>
+          <button
+            onClick={handleFilterSubmit}
+            className="px-4 py-2 bg-primary text-white text-sm font-medium rounded-lg hover:bg-primary/90 transition-colors shadow-sm whitespace-nowrap w-full md:w-auto"
+          >
+            Filtrar
+          </button>
+          <button
+            onClick={handleClearFilter}
+            className="px-4 py-2 bg-primary text-white text-sm font-medium rounded-lg hover:bg-primary/90 transition-colors shadow-sm whitespace-nowrap w-full md:w-auto"
+          >
+            Limpar filtros
+          </button>
+        </div>
+      </div>
+
       {currentItems.length > 0 ? (
         <>
           <div className="hidden lg:block bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="bg-gradient-to-r from-gray-50 to-gray-100 border-b border-gray-200">
+                  <tr className="bg-linear-to-r from-gray-50 to-gray-100 border-b border-gray-200">
                     <th
                       scope="col"
                       className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider"
@@ -163,7 +285,11 @@ export default function RequestsList({ initialRequests }: RequestsListProps) {
                       className="hover:bg-gray-50 transition-colors cursor-pointer"
                     >
                       <td className="px-6 py-4 text-gray-500 font-medium text-sm">
-                        {solicitacao.user || solicitacao.user_id}
+                        {solicitacao.company
+                          ? `${solicitacao.user || solicitacao.user_id} - ${
+                              solicitacao.company
+                            }`
+                          : solicitacao.user}
                       </td>
                       <td className="px-6 py-4 text-gray-500 font-medium text-sm whitespace-nowrap">
                         {formatUTCDateToBrasilia(solicitacao.request_date)}

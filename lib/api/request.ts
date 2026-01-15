@@ -16,6 +16,7 @@ export interface Request {
   request_date: string;
   user_id: string;
   user?: string;
+  company?: string;
   created_at: Date;
   approved_at: Date;
 }
@@ -92,9 +93,26 @@ export async function GetUserRequests(): Promise<Request[]> {
   return response;
 }
 
-export async function GetGroupRequests(): Promise<Request[]> {
+interface FilterProps {
+  name?: string;
+  startDate?: string;
+  endDate?: string;
+}
+
+export async function GetGroupRequests(
+  filters?: FilterProps
+): Promise<Request[]> {
+  const params = new URLSearchParams();
+
+  if (filters?.name) params.set("name", filters.name);
+  if (filters?.startDate) params.set("startDate", filters.startDate);
+  if (filters?.endDate) params.set("endDate", filters.endDate);
+
+  const queryString = params.toString();
+  const url = `/requests/list/group${queryString ? `?${queryString}` : ""}`;
+
   const response = await apiFetch<Request[]>(
-    "/requests/list/group",
+    url,
     { method: "GET" },
     "Failed to get requests"
   );
