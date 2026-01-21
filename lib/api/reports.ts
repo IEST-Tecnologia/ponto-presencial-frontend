@@ -28,7 +28,8 @@ async function getAuthHeaders(): Promise<HeadersInit> {
 export async function downloadAttendanceReport(
   startDate: string,
   endDate: string,
-  company: string
+  company: string,
+  users?: string[]
 ): Promise<{
   success: boolean;
   data?: Blob;
@@ -40,13 +41,19 @@ export async function downloadAttendanceReport(
   }
 
   try {
-    const url = `${API_URL}/reports/attendance?startDate=${startDate}&endDate=${endDate}&company=${company}`;
+    const url = `${API_URL}/reports/attendance`;
     const headers = await getAuthHeaders();
 
     const response = await fetch(url, {
-      method: "GET",
+      method: "POST",
       headers: headers,
       cache: "no-store",
+      body: JSON.stringify({
+        startDate,
+        endDate,
+        company,
+        ...(users && users.length > 0 && { users }),
+      }),
     });
 
     if (!response.ok) {
