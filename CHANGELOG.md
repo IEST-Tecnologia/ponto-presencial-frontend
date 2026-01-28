@@ -1,3 +1,19 @@
+# [1.11.0](https://github.com/IEST-Tecnologia/ponto-presencial-frontend/compare/v1.10.0...v1.11.0) (2026-01-28)
+
+
+### Features
+
+* add permission ([9f26a15](https://github.com/IEST-Tecnologia/ponto-presencial-frontend/commit/9f26a15d77146593cac021184e00ae5433db1b3b))
+* adding some filters and calendar limitations ([ec1c6a3](https://github.com/IEST-Tecnologia/ponto-presencial-frontend/commit/ec1c6a3aa7658a46823b21c637c3b25535dc840d))
+* approver view ([d23b4f8](https://github.com/IEST-Tecnologia/ponto-presencial-frontend/commit/d23b4f8b9d3617c3eac95324fe9ebd6d81d8cd18))
+* create form request ([75b744c](https://github.com/IEST-Tecnologia/ponto-presencial-frontend/commit/75b744c08be64e287f4f7780d06ebb6cb943d391))
+* implement company selection and fetch valid companies for attendance report ([af3ce7c](https://github.com/IEST-Tecnologia/ponto-presencial-frontend/commit/af3ce7c2f4b5ef30c2c376b761f30bdf6c07f505))
+* implement request approval actions and enhance date formatting ([91f28e4](https://github.com/IEST-Tecnologia/ponto-presencial-frontend/commit/91f28e44b481f470dbe2e694061285b4cd7e262a))
+* implement request methods ([3a7e7eb](https://github.com/IEST-Tecnologia/ponto-presencial-frontend/commit/3a7e7eb0c4ff37abb8dcf2dcf472d951b773ca1a))
+* improve report ([#14](https://github.com/IEST-Tecnologia/ponto-presencial-frontend/issues/14)) ([f6ed3ca](https://github.com/IEST-Tecnologia/ponto-presencial-frontend/commit/f6ed3ca3b763e8935f77b40036e6e4ff366026b1))
+* improve user selection and attendance report functionality ([acf82c0](https://github.com/IEST-Tecnologia/ponto-presencial-frontend/commit/acf82c098b706ab48e93ece810aeff17b953a27e))
+* update navigation and request handling to reflect department terminology ([336f8b1](https://github.com/IEST-Tecnologia/ponto-presencial-frontend/commit/336f8b1fbb4081d2f2e4ef55bc2ca0ae2da8de12))
+
 # [1.10.0](https://github.com/IEST-Tecnologia/ponto-presencial-frontend/compare/v1.9.0...v1.10.0) (2025-12-18)
 
 
