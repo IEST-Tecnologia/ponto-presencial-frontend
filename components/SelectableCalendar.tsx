@@ -26,11 +26,18 @@ const MONTHS = [
   "Dezembro",
 ];
 
+function getMinDate(): Date {
+  const today = new Date();
+  return new Date(today.getFullYear(), today.getMonth() - 3, 1);
+}
+
 export default function SelectableCalendar({
   records,
   selectedDate,
   onDateSelect,
 }: CalendarProps) {
+  const today = new Date();
+  const minDate = getMinDate();
   const [currentDate, setCurrentDate] = useState(new Date());
 
   const year = currentDate.getFullYear();
@@ -41,6 +48,22 @@ export default function SelectableCalendar({
   const startingDay = firstDayOfMonth.getDay();
   const daysInMonth = lastDayOfMonth.getDate();
   const prevMonthLastDay = new Date(year, month, 0).getDate();
+
+  const canGoPrevMonth = () => {
+    const prevMonthDate = new Date(year, month - 1, 1);
+    return prevMonthDate >= new Date(minDate.getFullYear(), minDate.getMonth(), 1);
+  };
+
+  const canGoNextMonth = () => {
+    const nextMonthDate = new Date(year, month + 1, 1);
+    return nextMonthDate <= new Date(today.getFullYear(), today.getMonth(), 1);
+  };
+
+  const isDateDisabled = (day: number, m: number, y: number): boolean => {
+    const date = new Date(y, m, day);
+    const todayStart = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+    return date > todayStart || date < minDate;
+  };
 
   const recordsByDate = new Map<string, TimeRecord[]>();
   records.forEach((record) => {
@@ -53,11 +76,15 @@ export default function SelectableCalendar({
   });
 
   const prevMonthFn = () => {
-    setCurrentDate(new Date(year, month - 1, 1));
+    if (canGoPrevMonth()) {
+      setCurrentDate(new Date(year, month - 1, 1));
+    }
   };
 
   const nextMonthFn = () => {
-    setCurrentDate(new Date(year, month + 1, 1));
+    if (canGoNextMonth()) {
+      setCurrentDate(new Date(year, month + 1, 1));
+    }
   };
 
   type DayInfo = {
@@ -95,7 +122,6 @@ export default function SelectableCalendar({
     });
   }
 
-  const today = new Date();
   const isToday = (day: number, m: number, y: number) =>
     day === today.getDate() &&
     m === today.getMonth() &&
@@ -127,7 +153,7 @@ export default function SelectableCalendar({
     y: number,
     hasRecords: boolean
   ) => {
-    if (hasRecords) return;
+    if (hasRecords || isDateDisabled(day, m, y)) return;
     // Cria a data com horário do meio-dia para evitar problemas de timezone
     const date = new Date(y, m, day, 12, 0, 0, 0);
     onDateSelect(date);
@@ -138,7 +164,12 @@ export default function SelectableCalendar({
       <div className="flex justify-between items-center mb-4">
         <button
           onClick={prevMonthFn}
-          className="p-2 hover:bg-gray-100 rounded-lg text-gray-600"
+          disabled={!canGoPrevMonth()}
+          className={`p-2 rounded-lg ${
+            canGoPrevMonth()
+              ? "hover:bg-gray-100 text-gray-600"
+              : "text-gray-300 cursor-not-allowed"
+          }`}
           type="button"
         >
           ←
@@ -148,7 +179,12 @@ export default function SelectableCalendar({
         </h2>
         <button
           onClick={nextMonthFn}
-          className="p-2 hover:bg-gray-100 rounded-lg text-gray-600"
+          disabled={!canGoNextMonth()}
+          className={`p-2 rounded-lg ${
+            canGoNextMonth()
+              ? "hover:bg-gray-100 text-gray-600"
+              : "text-gray-300 cursor-not-allowed"
+          }`}
           type="button"
         >
           →
@@ -172,6 +208,7 @@ export default function SelectableCalendar({
           const hasRecords = dayRecords.length > 0;
           const isTodayDay = isToday(day, m, y);
           const isSelectedDay = isSelected(day, m, y);
+          const isDisabled = isDateDisabled(day, m, y);
 
           if (!isCurrentMonth) {
             return (
@@ -196,9 +233,11 @@ export default function SelectableCalendar({
               key={`current-${day}`}
               type="button"
               onClick={() => handleDateClick(day, m, y, hasRecords)}
-              disabled={hasRecords}
+              disabled={hasRecords || isDisabled}
               className={`aspect-square flex flex-col items-center justify-center rounded-lg text-sm relative transition-colors ${
-                isSelectedDay
+                isDisabled
+                  ? "text-gray-300 cursor-not-allowed"
+                  : isSelectedDay
                   ? "bg-primary text-white font-bold ring-2 ring-primary ring-offset-2"
                   : hasRecords
                   ? "bg-primary/20 text-primary cursor-not-allowed"
@@ -208,7 +247,7 @@ export default function SelectableCalendar({
               }`}
             >
               {day}
-              {hasRecords && (
+              {hasRecords && !isDisabled && (
                 <span className="absolute bottom-0.5 text-[10px] text-primary">
                   ✓
                 </span>

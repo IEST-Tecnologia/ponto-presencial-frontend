@@ -71,7 +71,9 @@ export default async function Page({
             Colaborador
           </p>
           <p className="text-gray-500 font-medium text-sm">
-            {request.user || request.user_id}
+            {request.company
+              ? `${request.user || request.user_id} - ${request.company}`
+              : request.user}
           </p>
         </div>
 

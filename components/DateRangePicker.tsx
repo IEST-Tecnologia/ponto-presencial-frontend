@@ -3,6 +3,14 @@ import { useState, useEffect } from "react";
 
 interface DateRangePickerProps {
   onRangeChange?: (startDate: string, endDate: string) => void;
+  initialStartDate?: string;
+  initialEndDate?: string;
+}
+
+function parseISODate(dateStr?: string): Date | null {
+  if (!dateStr) return null;
+  const [year, month, day] = dateStr.split("-").map(Number);
+  return new Date(year, month - 1, day);
 }
 
 const WEEKDAYS = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
@@ -55,14 +63,25 @@ function formatDateToISO(date: Date): string {
   )}-${String(date.getDate()).padStart(2, "0")}`;
 }
 
+function getMinDate(): Date {
+  const today = new Date();
+  return new Date(today.getFullYear(), today.getMonth() - 3, 1);
+}
+
 export default function DateRangePicker({
   onRangeChange,
+  initialStartDate,
+  initialEndDate,
 }: DateRangePickerProps) {
+  const today = new Date();
+  const minDate = getMinDate();
   const [currentDate, setCurrentDate] = useState(new Date());
   const [startDate, setStartDate] = useState<Date | null>(
-    getDefaultStartDate()
+    parseISODate(initialStartDate) ?? getDefaultStartDate()
   );
-  const [endDate, setEndDate] = useState<Date | null>(new Date());
+  const [endDate, setEndDate] = useState<Date | null>(
+    parseISODate(initialEndDate) ?? new Date()
+  );
   const [isSelectingStart, setIsSelectingStart] = useState(true);
 
   useEffect(() => {
@@ -82,12 +101,32 @@ export default function DateRangePicker({
   const daysInMonth = lastDayOfMonth.getDate();
   const prevMonthLastDay = new Date(year, month, 0).getDate();
 
+  const canGoPrevMonth = () => {
+    const prevMonthDate = new Date(year, month - 1, 1);
+    return prevMonthDate >= new Date(minDate.getFullYear(), minDate.getMonth(), 1);
+  };
+
+  const canGoNextMonth = () => {
+    const nextMonthDate = new Date(year, month + 1, 1);
+    return nextMonthDate <= new Date(today.getFullYear(), today.getMonth(), 1);
+  };
+
   const prevMonthFn = () => {
-    setCurrentDate(new Date(year, month - 1, 1));
+    if (canGoPrevMonth()) {
+      setCurrentDate(new Date(year, month - 1, 1));
+    }
   };
 
   const nextMonthFn = () => {
-    setCurrentDate(new Date(year, month + 1, 1));
+    if (canGoNextMonth()) {
+      setCurrentDate(new Date(year, month + 1, 1));
+    }
+  };
+
+  const isDateDisabled = (day: number, m: number, y: number): boolean => {
+    const date = new Date(y, m, day);
+    const todayStart = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+    return date > todayStart || date < minDate;
   };
 
   type DayInfo = {
@@ -128,13 +167,14 @@ export default function DateRangePicker({
     });
   }
 
-  const today = new Date();
   const isToday = (day: number, m: number, y: number) =>
     day === today.getDate() &&
     m === today.getMonth() &&
     y === today.getFullYear();
 
   const handleDayClick = (day: number, m: number, y: number) => {
+    if (isDateDisabled(day, m, y)) return;
+
     const selectedDate = new Date(y, m, day);
 
     if (isSelectingStart) {
@@ -229,7 +269,12 @@ export default function DateRangePicker({
       <div className="flex justify-between items-center mb-4">
         <button
           onClick={prevMonthFn}
-          className="p-2 hover:bg-gray-100 rounded-lg text-gray-600"
+          disabled={!canGoPrevMonth()}
+          className={`p-2 rounded-lg ${
+            canGoPrevMonth()
+              ? "hover:bg-gray-100 text-gray-600"
+              : "text-gray-300 cursor-not-allowed"
+          }`}
         >
           ←
         </button>
@@ -238,7 +283,12 @@ export default function DateRangePicker({
         </h2>
         <button
           onClick={nextMonthFn}
-          className="p-2 hover:bg-gray-100 rounded-lg text-gray-600"
+          disabled={!canGoNextMonth()}
+          className={`p-2 rounded-lg ${
+            canGoNextMonth()
+              ? "hover:bg-gray-100 text-gray-600"
+              : "text-gray-300 cursor-not-allowed"
+          }`}
         >
           →
         </button>
@@ -263,6 +313,7 @@ export default function DateRangePicker({
           const inRange = isInRange(day, m, y);
           const isStart = isStartDate(day, m, y);
           const isEnd = isEndDate(day, m, y);
+          const isDisabled = isDateDisabled(day, m, y);
 
           if (!isCurrentMonth) {
             return (
@@ -279,8 +330,11 @@ export default function DateRangePicker({
             <button
               key={`current-${day}`}
               onClick={() => handleDayClick(day, m, y)}
+              disabled={isDisabled}
               className={`aspect-square flex items-center justify-center rounded-lg text-sm relative transition-colors ${
-                isStart || isEnd
+                isDisabled
+                  ? "text-gray-300 cursor-not-allowed"
+                  : isStart || isEnd
                   ? "bg-primary text-white font-bold"
                   : inRange
                   ? "bg-primary/20 text-primary"
@@ -290,7 +344,7 @@ export default function DateRangePicker({
               }`}
             >
               {day}
-              {(isStart || isEnd) && (
+              {(isStart || isEnd) && !isDisabled && (
                 <span className="absolute -top-1 -right-1 w-2 h-2 bg-primary rounded-full" />
               )}
             </button>

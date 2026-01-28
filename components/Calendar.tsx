@@ -24,10 +24,16 @@ const MONTHS = [
 ];
 
 export default function Calendar({ records }: CalendarProps) {
+  const today = new Date();
   const [currentDate, setCurrentDate] = useState(new Date());
 
   const year = currentDate.getFullYear();
   const month = currentDate.getMonth();
+
+  const canGoNextMonth = () => {
+    const nextMonthDate = new Date(year, month + 1, 1);
+    return nextMonthDate <= new Date(today.getFullYear(), today.getMonth(), 1);
+  };
 
   const firstDayOfMonth = new Date(year, month, 1);
   const lastDayOfMonth = new Date(year, month + 1, 0);
@@ -50,7 +56,9 @@ export default function Calendar({ records }: CalendarProps) {
   };
 
   const nextMonthFn = () => {
-    setCurrentDate(new Date(year, month + 1, 1));
+    if (canGoNextMonth()) {
+      setCurrentDate(new Date(year, month + 1, 1));
+    }
   };
 
   type DayInfo = { day: number; month: number; year: number; isCurrentMonth: boolean };
@@ -76,7 +84,6 @@ export default function Calendar({ records }: CalendarProps) {
     days.push({ day: i, month: nextMonth, year: nextYear, isCurrentMonth: false });
   }
 
-  const today = new Date();
   const isToday = (day: number) =>
     day === today.getDate() &&
     month === today.getMonth() &&
@@ -103,7 +110,12 @@ export default function Calendar({ records }: CalendarProps) {
         </h2>
         <button
           onClick={nextMonthFn}
-          className="p-2 hover:bg-gray-100 rounded-lg text-gray-600"
+          disabled={!canGoNextMonth()}
+          className={`p-2 rounded-lg ${
+            canGoNextMonth()
+              ? "hover:bg-gray-100 text-gray-600"
+              : "text-gray-300 cursor-not-allowed"
+          }`}
         >
           →
         </button>

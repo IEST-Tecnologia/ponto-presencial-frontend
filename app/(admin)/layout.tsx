@@ -11,11 +11,13 @@ export default async function AdminLayout({
   const adminPermission = await verifyUserPermission("admin");
   if (!adminPermission) redirect("/");
   return (
-    <>
+    <div className="flex flex-col h-full w-full">
       <Header />
-      <div className="h-screen flex items-center justify-center w-full px-4">
-        {children}
-      </div>
-    </>
+      <main className="flex-1 min-h-0 bg-zinc-50 overflow-y-auto flex flex-col items-center">
+        <div className="flex flex-col w-full max-w-md items-center py-6 px-4">
+          {children}
+        </div>
+      </main>
+    </div>
   );
 }
