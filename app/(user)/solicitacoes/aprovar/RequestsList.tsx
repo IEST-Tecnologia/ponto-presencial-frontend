@@ -6,6 +6,7 @@ import { Request } from "@/lib/api/request";
 import { formatUTCDateToBrasilia } from "@/utils/date";
 import TextInput from "@/components/TextInput";
 import DateRangePicker from "@/components/DateRangePicker";
+import { Span } from "next/dist/trace";
 
 type TabType = "all" | "pending" | "approved" | "rejected";
 
@@ -22,13 +23,15 @@ export default function RequestsList({ initialRequests }: RequestsListProps) {
   const [currentPage, setCurrentPage] = useState(0);
   const [nameFilter, setNameFilter] = useState(searchParams.get("name") || "");
   const [startDate, setStartDate] = useState(
-    searchParams.get("startDate") || ""
+    searchParams.get("startDate") || "",
   );
   const [endDate, setEndDate] = useState(searchParams.get("endDate") || "");
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
   const datePickerRef = useRef<HTMLDivElement>(null);
 
   const requests = Array.isArray(initialRequests) ? initialRequests : [];
+
+  console.log(requests);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -213,6 +216,7 @@ export default function RequestsList({ initialRequests }: RequestsListProps) {
                   onRangeChange={handleRangeChange}
                   initialStartDate={startDate}
                   initialEndDate={endDate}
+                  maxMonthsBack={12}
                 />
               </div>
             )}
@@ -249,7 +253,7 @@ export default function RequestsList({ initialRequests }: RequestsListProps) {
                       scope="col"
                       className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider w-40"
                     >
-                      Dia solicitado
+                      Data do ajuste
                     </th>
                     <th
                       scope="col"
@@ -274,6 +278,12 @@ export default function RequestsList({ initialRequests }: RequestsListProps) {
                       className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider w-40"
                     >
                       Aprovado por
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider w-40"
+                    >
+                      Data conclusão
                     </th>
                   </tr>
                 </thead>
@@ -301,7 +311,7 @@ export default function RequestsList({ initialRequests }: RequestsListProps) {
                         <div className="flex items-center gap-2">
                           <div
                             className={`rounded-full h-2 w-2 shrink-0 ${getStatusColorClass(
-                              solicitacao.status
+                              solicitacao.status,
                             )}`}
                           ></div>
                           <span className="text-gray-700 whitespace-nowrap">
@@ -311,7 +321,7 @@ export default function RequestsList({ initialRequests }: RequestsListProps) {
                       </td>
                       <td className="px-6 py-4 text-gray-600 whitespace-nowrap">
                         {new Date(solicitacao.created_at).toLocaleDateString(
-                          "pt-BR"
+                          "pt-BR",
                         )}
                       </td>
                       <td className="px-6 py-4 text-gray-600">
@@ -319,6 +329,17 @@ export default function RequestsList({ initialRequests }: RequestsListProps) {
                           <span className="text-gray-400 italic">
                             Aguardando
                           </span>
+                        )}
+                      </td>
+                      <td className="px-6 py-4 text-gray-600">
+                        {solicitacao.approver ? (
+                          <span>
+                            {new Date(
+                              solicitacao.approved_at,
+                            ).toLocaleDateString("pt-BR")}
+                          </span>
+                        ) : (
+                          <span className="text-gray-400 italic">-</span>
                         )}
                       </td>
                     </tr>
@@ -347,7 +368,7 @@ export default function RequestsList({ initialRequests }: RequestsListProps) {
                   <div className="flex items-center gap-2">
                     <div
                       className={`rounded-full h-2 w-2 shrink-0 ${getStatusColorClass(
-                        solicitacao.status
+                        solicitacao.status,
                       )}`}
                     ></div>
                     <span className="text-gray-500 font-medium text-sm">
@@ -381,7 +402,7 @@ export default function RequestsList({ initialRequests }: RequestsListProps) {
                     </p>
                     <p className="text-gray-600 text-sm">
                       {new Date(solicitacao.created_at).toLocaleDateString(
-                        "pt-BR"
+                        "pt-BR",
                       )}
                     </p>
                   </div>
@@ -409,8 +430,8 @@ export default function RequestsList({ initialRequests }: RequestsListProps) {
                   activeTab === "pending"
                     ? "pendente"
                     : activeTab === "approved"
-                    ? "aprovada"
-                    : "rejeitada"
+                      ? "aprovada"
+                      : "rejeitada"
                 } encontrada`}
           </p>
         </div>
