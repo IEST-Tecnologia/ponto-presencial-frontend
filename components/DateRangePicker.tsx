@@ -5,6 +5,7 @@ interface DateRangePickerProps {
   onRangeChange?: (startDate: string, endDate: string) => void;
   initialStartDate?: string;
   initialEndDate?: string;
+  maxMonthsBack?: number;
 }
 
 function parseISODate(dateStr?: string): Date | null {
@@ -63,18 +64,19 @@ function formatDateToISO(date: Date): string {
   )}-${String(date.getDate()).padStart(2, "0")}`;
 }
 
-function getMinDate(): Date {
+function getMinDate(monthsBack: number = 3): Date {
   const today = new Date();
-  return new Date(today.getFullYear(), today.getMonth() - 3, 1);
+  return new Date(today.getFullYear(), today.getMonth() - monthsBack, 1);
 }
 
 export default function DateRangePicker({
   onRangeChange,
   initialStartDate,
   initialEndDate,
+  maxMonthsBack = 3,
 }: DateRangePickerProps) {
   const today = new Date();
-  const minDate = getMinDate();
+  const minDate = getMinDate(maxMonthsBack);
   const [currentDate, setCurrentDate] = useState(new Date());
   const [startDate, setStartDate] = useState<Date | null>(
     parseISODate(initialStartDate) ?? getDefaultStartDate()
