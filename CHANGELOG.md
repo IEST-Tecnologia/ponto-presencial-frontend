@@ -1,3 +1,11 @@
+## [1.11.1](https://github.com/IEST-Tecnologia/ponto-presencial-frontend/compare/v1.11.0...v1.11.1) (2026-01-29)
+
+
+### Bug Fixes
+
+* minor fixes ([bfd6f73](https://github.com/IEST-Tecnologia/ponto-presencial-frontend/commit/bfd6f733bdc2c6dcf61fc66e68e6212f02b84aad))
+* minor fixes ([#15](https://github.com/IEST-Tecnologia/ponto-presencial-frontend/issues/15)) ([ee80393](https://github.com/IEST-Tecnologia/ponto-presencial-frontend/commit/ee8039354fa378084672fdabf42aff86193218ed))
+
 # [1.11.0](https://github.com/IEST-Tecnologia/ponto-presencial-frontend/compare/v1.10.0...v1.11.0) (2026-01-28)
 
 
