@@ -13,7 +13,7 @@ export default function Page() {
   const router = useRouter();
   const [currentPage, setCurrentPage] = useState(0);
   const [requests, setRequests] = useState<Request[]>([]);
-  const [hasPermission, setHasPermission] = useState<boolean>(false)
+  const [hasPermission, setHasPermission] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState(true);
 
   const totalPages = Math.ceil(requests.length / ITEMS_PER_PAGE);
@@ -41,12 +41,14 @@ export default function Page() {
 
   useEffect(() => {
     async function verifyPermission() {
-      const permission = await verifyUserPermission('request');
-      setHasPermission(permission)
+      const requestPermission = await verifyUserPermission("request");
+      const dpPermission = await verifyUserPermission("dp");
+
+      setHasPermission(requestPermission || dpPermission);
     }
 
-    verifyPermission()
-  })
+    verifyPermission();
+  });
 
   useEffect(() => {
     async function fetchRequests() {
@@ -72,19 +74,19 @@ export default function Page() {
           </p>
           <div className="flex flex-col md:flex-row gap-2">
             <button
-            onClick={handleNewRequest}
-            className="px-4 py-2 bg-primary text-white text-sm font-medium rounded-md hover:bg-primary/90 transition-colors cursor-pointer shadow-sm w-full sm:w-auto"
-          >
-            + Nova Solicitação
-          </button>
-          {hasPermission && (
-            <button
-            onClick={() => router.push("/solicitacoes/aprovar")}
-            className="px-4 py-2 bg-primary text-white text-sm cursor-pointer font-medium rounded-md hover:bg-primary/90 transition-colors shadow-sm w-full sm:w-auto"
-          >
-            Gerenciar Solicitações
-          </button>
-          )}
+              onClick={handleNewRequest}
+              className="px-4 py-2 bg-primary text-white text-sm font-medium rounded-md hover:bg-primary/90 transition-colors cursor-pointer shadow-sm w-full sm:w-auto"
+            >
+              + Nova Solicitação
+            </button>
+            {hasPermission && (
+              <button
+                onClick={() => router.push("/solicitacoes/aprovar")}
+                className="px-4 py-2 bg-primary text-white text-sm cursor-pointer font-medium rounded-md hover:bg-primary/90 transition-colors shadow-sm w-full sm:w-auto"
+              >
+                Gerenciar Solicitações
+              </button>
+            )}
           </div>
         </div>
 
@@ -155,7 +157,7 @@ export default function Page() {
                           <div className="flex items-center gap-2">
                             <div
                               className={`rounded-full h-2 w-2 shrink-0 ${getStatusColorClass(
-                                solicitacao.status
+                                solicitacao.status,
                               )}`}
                             ></div>
                             <span className="text-gray-700 whitespace-nowrap">
@@ -165,7 +167,7 @@ export default function Page() {
                         </td>
                         <td className="px-6 py-4 text-gray-600 whitespace-nowrap">
                           {new Date(solicitacao.created_at).toLocaleDateString(
-                            "pt-BR"
+                            "pt-BR",
                           )}
                         </td>
                         <td className="px-6 py-4 text-gray-600">
@@ -200,7 +202,7 @@ export default function Page() {
                     <div className="flex items-center gap-2">
                       <div
                         className={`rounded-full h-2 w-2 shrink-0 ${getStatusColorClass(
-                          solicitacao.status
+                          solicitacao.status,
                         )}`}
                       ></div>
                       <span className="text-sm text-gray-500 font-medium">
@@ -225,7 +227,7 @@ export default function Page() {
                       </p>
                       <p className="text-gray-600 text-sm">
                         {new Date(solicitacao.created_at).toLocaleDateString(
-                          "pt-BR"
+                          "pt-BR",
                         )}
                       </p>
                     </div>
