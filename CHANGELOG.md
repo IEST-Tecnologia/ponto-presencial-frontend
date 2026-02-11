@@ -1,3 +1,11 @@
+## [1.11.2](https://github.com/IEST-Tecnologia/ponto-presencial-frontend/compare/v1.11.1...v1.11.2) (2026-02-11)
+
+
+### Bug Fixes
+
+* add missing rule for permission ([f5164ce](https://github.com/IEST-Tecnologia/ponto-presencial-frontend/commit/f5164ce2ecd907693cddd13be5d7a30aa8d1e066))
+* add missing rule for permission ([#16](https://github.com/IEST-Tecnologia/ponto-presencial-frontend/issues/16)) ([d55449b](https://github.com/IEST-Tecnologia/ponto-presencial-frontend/commit/d55449b987dba88c2117f090fa5ff653f470fd2e))
+
 ## [1.11.1](https://github.com/IEST-Tecnologia/ponto-presencial-frontend/compare/v1.11.0...v1.11.1) (2026-01-29)
 
 
