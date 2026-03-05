@@ -8,6 +8,10 @@ interface CreateRequest {
   requestDate: string;
 }
 
+export interface Departments {
+  data: string[];
+}
+
 export interface Request {
   id: string;
   status: "pending" | "rejected" | "approved";
@@ -29,7 +33,7 @@ export interface CreateRequestResponse {
 
 export async function CreateRequest(
   reason: string,
-  requestDate: string
+  requestDate: string,
 ): Promise<CreateRequestResponse> {
   const payload = {
     reason: reason,
@@ -40,7 +44,7 @@ export async function CreateRequest(
     const response = await apiFetch<CreateRequestResponse>(
       "/requests",
       { method: "POST", body: JSON.stringify(payload) },
-      "Failed to create a Request"
+      "Failed to create a Request",
     );
 
     if (!response) {
@@ -82,7 +86,7 @@ export async function GetUserRequests(): Promise<Request[]> {
   const response = await apiFetch<Request[]>(
     "/requests/user",
     { method: "GET" },
-    "Failed to get requests"
+    "Failed to get requests",
   );
 
   if (!response) {
@@ -97,16 +101,19 @@ interface FilterProps {
   name?: string;
   startDate?: string;
   endDate?: string;
+  departments?: string[];
 }
 
 export async function GetGroupRequests(
-  filters?: FilterProps
+  filters?: FilterProps,
 ): Promise<Request[]> {
   const params = new URLSearchParams();
 
   if (filters?.name) params.set("name", filters.name);
   if (filters?.startDate) params.set("startDate", filters.startDate);
   if (filters?.endDate) params.set("endDate", filters.endDate);
+  if (filters?.departments?.length)
+    params.set("departments", filters.departments.join(","));
 
   const queryString = params.toString();
   const url = `/requests/list/group${queryString ? `?${queryString}` : ""}`;
@@ -114,7 +121,7 @@ export async function GetGroupRequests(
   const response = await apiFetch<Request[]>(
     url,
     { method: "GET" },
-    "Failed to get requests"
+    "Failed to get requests",
   );
 
   if (!response) {
@@ -128,7 +135,7 @@ export async function GetRequestById(id: string): Promise<Request | null> {
   const response = await apiFetch<Request>(
     `/requests/${id}`,
     { method: "GET" },
-    "Failed to get requests"
+    "Failed to get requests",
   );
 
   if (!response) {
@@ -140,7 +147,7 @@ export async function GetRequestById(id: string): Promise<Request | null> {
 
 export async function UpdateRequestStatus(
   id: string,
-  status: "approved" | "rejected"
+  status: "approved" | "rejected",
 ): Promise<Request | null> {
   const payload = {
     status: status,
@@ -149,7 +156,7 @@ export async function UpdateRequestStatus(
   const response = await apiFetch<Request>(
     `/requests/${id}`,
     { method: "PUT", body: JSON.stringify(payload) },
-    "Failed to update request status"
+    "Failed to update request status",
   );
 
   if (!response) {
@@ -158,5 +165,21 @@ export async function UpdateRequestStatus(
 
   revalidatePath(`/solicitacoes/aprovar/${id}`);
   revalidatePath("/solicitacoes/aprovar");
+  return response;
+}
+
+export async function GetDepartments(): Promise<Departments> {
+  const response = await apiFetch<Departments>(
+    "/options/groups",
+    { method: "GET" },
+    "Failed to get deartments",
+  );
+
+  if (!response) {
+    return {
+      data: [],
+    };
+  }
+
   return response;
 }
