@@ -41,10 +41,9 @@ export default function Page() {
 
   useEffect(() => {
     async function verifyPermission() {
-      const requestPermission = await verifyUserPermission("request");
       const dpPermission = await verifyUserPermission("dp");
 
-      setHasPermission(requestPermission || dpPermission);
+      setHasPermission(dpPermission);
     }
 
     verifyPermission();
