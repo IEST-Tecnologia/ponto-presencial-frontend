@@ -14,9 +14,13 @@ const ITEMS_PER_PAGE = 5;
 
 interface RequestsListProps {
   initialRequests: Request[];
+  availableDepartments: string[];
 }
 
-export default function RequestsList({ initialRequests }: RequestsListProps) {
+export default function RequestsList({
+  initialRequests,
+  availableDepartments,
+}: RequestsListProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [activeTab, setActiveTab] = useState<TabType>("all");
@@ -27,11 +31,17 @@ export default function RequestsList({ initialRequests }: RequestsListProps) {
   );
   const [endDate, setEndDate] = useState(searchParams.get("endDate") || "");
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
+  const [isDepartmentPickerOpen, setIsDepartmentPickerOpen] = useState(false);
+  const [selectedDepartments, setSelectedDepartments] = useState<string[]>(
+    () => {
+      const raw = searchParams.get("departments");
+      return raw ? raw.split(",").filter(Boolean) : [];
+    },
+  );
   const datePickerRef = useRef<HTMLDivElement>(null);
+  const departmentPickerRef = useRef<HTMLDivElement>(null);
 
   const requests = Array.isArray(initialRequests) ? initialRequests : [];
-
-  console.log(requests);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -40,6 +50,12 @@ export default function RequestsList({ initialRequests }: RequestsListProps) {
         !datePickerRef.current.contains(event.target as Node)
       ) {
         setIsDatePickerOpen(false);
+      }
+      if (
+        departmentPickerRef.current &&
+        !departmentPickerRef.current.contains(event.target as Node)
+      ) {
+        setIsDepartmentPickerOpen(false);
       }
     };
 
@@ -68,20 +84,41 @@ export default function RequestsList({ initialRequests }: RequestsListProps) {
       params.delete("endDate");
     }
 
+    if (
+      selectedDepartments.length === 0 ||
+      selectedDepartments.includes("all")
+    ) {
+      params.set("departments", "all");
+    } else {
+      params.set("departments", selectedDepartments.join(","));
+    }
+
     router.push(`/solicitacoes/aprovar?${params.toString()}`);
     setIsDatePickerOpen(false);
+    setIsDepartmentPickerOpen(false);
   };
 
   const handleClearFilter = () => {
-    const params = new URLSearchParams(searchParams.toString());
     setNameFilter("");
     setStartDate("");
     setEndDate("");
-    params.delete("name");
-    params.delete("startDate");
-    params.delete("endDate");
+    setSelectedDepartments([]);
     router.push("/solicitacoes/aprovar");
     setIsDatePickerOpen(false);
+    setIsDepartmentPickerOpen(false);
+  };
+
+  const toggleDepartment = (dept: string) => {
+    if (dept === "all") {
+      setSelectedDepartments(["all"]);
+      return;
+    }
+    setSelectedDepartments((prev) => {
+      const withoutAll = prev.filter((d) => d !== "all");
+      return withoutAll.includes(dept)
+        ? withoutAll.filter((d) => d !== dept)
+        : [...withoutAll, dept];
+    });
   };
 
   const handleRangeChange = (start: string, end: string) => {
@@ -201,6 +238,51 @@ export default function RequestsList({ initialRequests }: RequestsListProps) {
             onChange={(e) => setNameFilter(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && handleFilterSubmit()}
           />
+          <div className="relative w-full md:flex-1" ref={departmentPickerRef}>
+            <label className="text-xs text-gray-500 block mb-1">
+              Departamentos
+            </label>
+            <button
+              type="button"
+              onClick={() => setIsDepartmentPickerOpen(!isDepartmentPickerOpen)}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm text-gray-700 text-left focus:outline-none focus:border-primary focus:bg-primary/5 transition-colors"
+            >
+              {selectedDepartments.length === 0 ||
+              selectedDepartments[0] === "all"
+                ? "Todos"
+                : selectedDepartments.join(", ")}
+            </button>
+            {isDepartmentPickerOpen && (
+              <div className="absolute top-full left-0 mt-2 z-50 w-full bg-white border border-gray-200 rounded-lg shadow-lg max-h-56 overflow-y-auto">
+                <label className="flex items-center gap-2 px-3 py-2 hover:bg-gray-50 cursor-pointer text-sm text-gray-700">
+                  <input
+                    type="checkbox"
+                    checked={
+                      selectedDepartments.length === 0 ||
+                      selectedDepartments.includes("all")
+                    }
+                    onChange={() => toggleDepartment("all")}
+                    className="accent-primary"
+                  />
+                  Todos
+                </label>
+                {availableDepartments.map((dept) => (
+                  <label
+                    key={dept}
+                    className="flex items-center gap-2 px-3 py-2 hover:bg-gray-50 cursor-pointer text-sm text-gray-700"
+                  >
+                    <input
+                      type="checkbox"
+                      checked={selectedDepartments.includes(dept)}
+                      onChange={() => toggleDepartment(dept)}
+                      className="accent-primary"
+                    />
+                    {dept}
+                  </label>
+                ))}
+              </div>
+            )}
+          </div>
           <div className="relative w-full md:flex-1" ref={datePickerRef}>
             <label className="text-xs text-gray-500 block mb-1">Período</label>
             <button
