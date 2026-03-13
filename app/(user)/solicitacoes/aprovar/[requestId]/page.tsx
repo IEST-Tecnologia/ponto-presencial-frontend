@@ -3,13 +3,17 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import RequestCalendar from "@/components/RequestCalendar";
 import ApprovalActions from "./ApprovalActions";
+import { Params } from "../page";
 
 export default async function Page({
   params,
+  searchParams,
 }: {
   params: Promise<{ requestId: string }>;
+  searchParams: Promise<Params>;
 }) {
   const { requestId } = await params;
+  const { name, startDate, endDate, departments } = await searchParams;
   const request = await GetRequestById(requestId);
   if (!request) return redirect("/solicitacoes/aprovar");
 
@@ -23,6 +27,21 @@ export default async function Page({
     return "Pendente";
   };
 
+  const redirectParams = new URLSearchParams();
+
+  if (name) {
+    redirectParams.set("name", name);
+  }
+  if (startDate) {
+    redirectParams.set("startDate", startDate);
+  }
+  if (endDate) {
+    redirectParams.set("endDate", endDate);
+  }
+  if (departments) {
+    redirectParams.set("departments", departments);
+  }
+
   const getStatusColorClass = () => {
     if (isApproved) return "bg-green-100 text-green-800 border-green-300";
     if (isRejected) return "bg-red-100 text-red-800 border-red-300";
@@ -33,7 +52,7 @@ export default async function Page({
     <div className="w-full flex flex-col items-center py-6 max-w-2xl mx-auto space-y-6">
       <div className="w-full flex items-center justify-between">
         <Link
-          href="/solicitacoes/aprovar"
+          href={`/solicitacoes/aprovar?${redirectParams.toString()}`}
           className="p-2 hover:bg-gray-100 rounded-lg text-gray-600 transition-colors flex items-center gap-2"
         >
           <span>←</span>
@@ -58,8 +77,8 @@ export default async function Page({
               isApproved
                 ? "bg-green-500"
                 : isRejected
-                ? "bg-red-500"
-                : "bg-yellow-500"
+                  ? "bg-red-500"
+                  : "bg-yellow-500"
             }`}
           ></div>
         </div>

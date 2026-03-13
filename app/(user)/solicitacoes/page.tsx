@@ -7,7 +7,7 @@ import { Request } from "@/lib/api/request";
 import { formatUTCDateToBrasilia } from "@/utils/date";
 import { verifyUserPermission } from "@/lib/permission";
 
-const ITEMS_PER_PAGE = 3;
+const ITEMS_PER_PAGE = 5;
 
 export default function Page() {
   const router = useRouter();
@@ -41,10 +41,9 @@ export default function Page() {
 
   useEffect(() => {
     async function verifyPermission() {
-      const requestPermission = await verifyUserPermission("request");
       const dpPermission = await verifyUserPermission("dp");
 
-      setHasPermission(requestPermission || dpPermission);
+      setHasPermission(dpPermission);
     }
 
     verifyPermission();

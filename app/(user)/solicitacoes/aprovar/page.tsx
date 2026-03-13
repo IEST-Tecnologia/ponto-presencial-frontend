@@ -1,17 +1,26 @@
 import { GetDepartments, GetGroupRequests } from "@/lib/api/request";
 import RequestsList from "./RequestsList";
 
+export interface Params {
+  name?: string;
+  startDate?: string;
+  endDate?: string;
+  departments?: string;
+}
+
 export default async function Page({
   searchParams,
 }: {
-  searchParams: Promise<{
-    name?: string;
-    startDate?: string;
-    endDate?: string;
-    departments?: string;
-  }>;
+  searchParams: Promise<Params>;
 }) {
   const { name, startDate, endDate, departments } = await searchParams;
+
+  const params: Params = {
+    name,
+    startDate,
+    endDate,
+    departments,
+  };
 
   const { data: availableDepartments } = await GetDepartments();
 
@@ -31,6 +40,7 @@ export default async function Page({
     <RequestsList
       initialRequests={requests}
       availableDepartments={availableDepartments ?? []}
+      params={params}
     />
   );
 }
