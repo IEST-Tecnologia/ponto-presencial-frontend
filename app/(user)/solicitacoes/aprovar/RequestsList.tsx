@@ -111,6 +111,7 @@ export default function RequestsList({
     }
 
     router.push(`/solicitacoes/aprovar?${params.toString()}`);
+    setCurrentPage(0);
     setIsDatePickerOpen(false);
     setIsDepartmentPickerOpen(false);
   };
@@ -121,6 +122,7 @@ export default function RequestsList({
     setEndDate("");
     setSelectedDepartments([]);
     router.push("/solicitacoes/aprovar");
+    setCurrentPage(0);
     setIsDatePickerOpen(false);
     setIsDepartmentPickerOpen(false);
   };
