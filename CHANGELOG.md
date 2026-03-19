@@ -1,3 +1,11 @@
+# [1.13.0](https://github.com/IEST-Tecnologia/ponto-presencial-frontend/compare/v1.12.0...v1.13.0) (2026-03-19)
+
+
+### Features
+
+* back request permission verification ([c0862e4](https://github.com/IEST-Tecnologia/ponto-presencial-frontend/commit/c0862e479c7e61dcfa5f8293e4636e3da6f026ba))
+* back request permission verification ([#21](https://github.com/IEST-Tecnologia/ponto-presencial-frontend/issues/21)) ([64de67f](https://github.com/IEST-Tecnologia/ponto-presencial-frontend/commit/64de67f1165141149881b2094d1703c192dccf65))
+
 # [1.12.0](https://github.com/IEST-Tecnologia/ponto-presencial-frontend/compare/v1.11.2...v1.12.0) (2026-03-19)
 
 
