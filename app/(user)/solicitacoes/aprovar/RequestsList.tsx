@@ -6,7 +6,7 @@ import { Request } from "@/lib/api/request";
 import { formatUTCDateToBrasilia } from "@/utils/date";
 import TextInput from "@/components/TextInput";
 import DateRangePicker from "@/components/DateRangePicker";
-import { Span } from "next/dist/trace";
+import { Params } from "./page";
 
 type TabType = "all" | "pending" | "approved" | "rejected";
 
@@ -15,11 +15,13 @@ const ITEMS_PER_PAGE = 5;
 interface RequestsListProps {
   initialRequests: Request[];
   availableDepartments: string[];
+  params: Params;
 }
 
 export default function RequestsList({
   initialRequests,
   availableDepartments,
+  params,
 }: RequestsListProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -42,6 +44,21 @@ export default function RequestsList({
   const departmentPickerRef = useRef<HTMLDivElement>(null);
 
   const requests = Array.isArray(initialRequests) ? initialRequests : [];
+
+  const redirectParams = new URLSearchParams();
+
+  if (params.name) {
+    redirectParams.set("name", params.name);
+  }
+  if (params.startDate) {
+    redirectParams.set("startDate", params.startDate);
+  }
+  if (params.endDate) {
+    redirectParams.set("endDate", params.endDate);
+  }
+  if (params.departments) {
+    redirectParams.set("departments", params.departments);
+  }
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -94,6 +111,7 @@ export default function RequestsList({
     }
 
     router.push(`/solicitacoes/aprovar?${params.toString()}`);
+    setCurrentPage(0);
     setIsDatePickerOpen(false);
     setIsDepartmentPickerOpen(false);
   };
@@ -104,6 +122,7 @@ export default function RequestsList({
     setEndDate("");
     setSelectedDepartments([]);
     router.push("/solicitacoes/aprovar");
+    setCurrentPage(0);
     setIsDatePickerOpen(false);
     setIsDepartmentPickerOpen(false);
   };
@@ -167,7 +186,9 @@ export default function RequestsList({
   const currentItems = filteredRequests.slice(startIndex, endIndex);
 
   const handleRequestClick = (requestId: string) => {
-    router.push(`/solicitacoes/aprovar/${requestId}`);
+    router.push(
+      `/solicitacoes/aprovar/${requestId}?${redirectParams.toString()}`,
+    );
   };
 
   const tabs = [
