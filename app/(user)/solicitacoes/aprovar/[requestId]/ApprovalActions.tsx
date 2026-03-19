@@ -21,13 +21,12 @@ export default function ApprovalActions({ requestId }: ApprovalActionsProps) {
     setActionType("approve");
     startTransition(async () => {
       try {
-        const result = await UpdateRequestStatus(requestId, "approved");
-        if (result) {
-          showToast("Solicitação aprovada com sucesso");
-          router.refresh();
-        }
+        await UpdateRequestStatus(requestId, "approved");
+        showToast("Solicitação aprovada com sucesso");
+        router.refresh();
       } catch (error) {
-        showToast("Erro ao aprovar solicitação");
+        const message = error instanceof Error ? error.message : String(error);
+        showToast(`Erro ao aprovar: ${message}`);
         console.error("Erro ao aprovar:", error);
         setActionType(null);
       }
@@ -38,13 +37,12 @@ export default function ApprovalActions({ requestId }: ApprovalActionsProps) {
     setActionType("reject");
     startTransition(async () => {
       try {
-        const result = await UpdateRequestStatus(requestId, "rejected");
-        if (result) {
-          showToast("Solicitação rejeitada");
-          router.refresh();
-        }
+        await UpdateRequestStatus(requestId, "rejected");
+        showToast("Solicitação rejeitada");
+        router.refresh();
       } catch (error) {
-        showToast("Erro ao rejeitar solicitação");
+        const message = error instanceof Error ? error.message : String(error);
+        showToast(`Erro ao rejeitar: ${message}`);
         console.error("Erro ao rejeitar:", error);
         setActionType(null);
       }
