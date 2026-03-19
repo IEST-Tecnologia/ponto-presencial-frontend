@@ -7,8 +7,10 @@ export default async function RequestLayout({
 }: {
   children: ReactNode;
 }) {
+  const requestPermission = await verifyUserPermission("request");
   const dpPermission = await verifyUserPermission("dp");
-  if (!dpPermission) redirect("/solicitacoes");
+  const permission = requestPermission || dpPermission;
+  if (!permission) redirect("/solicitacoes");
 
   return children;
 }
