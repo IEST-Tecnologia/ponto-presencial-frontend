@@ -1,3 +1,19 @@
+# [1.12.0](https://github.com/IEST-Tecnologia/ponto-presencial-frontend/compare/v1.11.2...v1.12.0) (2026-03-19)
+
+
+### Bug Fixes
+
+* trying to fix approval error and showing error ([06f1141](https://github.com/IEST-Tecnologia/ponto-presencial-frontend/commit/06f1141ace4258b81076c852b465d22135c28865))
+* trying to fix approval error and showing error ([#20](https://github.com/IEST-Tecnologia/ponto-presencial-frontend/issues/20)) ([85d8a11](https://github.com/IEST-Tecnologia/ponto-presencial-frontend/commit/85d8a11a5bd9b47330c595ab2bdf365d262ea4e6))
+
+
+### Features
+
+* add new filter of departments in request list ([7d94446](https://github.com/IEST-Tecnologia/ponto-presencial-frontend/commit/7d94446d1e3170215d8ce1039ecf34d6265335d3))
+* add new filter of departments in request list ([#17](https://github.com/IEST-Tecnologia/ponto-presencial-frontend/issues/17)) ([4e51d32](https://github.com/IEST-Tecnologia/ponto-presencial-frontend/commit/4e51d3258524724b388ad91ffedb18f802657628))
+* save searchParams in the url for back to the page with filters ([10e807d](https://github.com/IEST-Tecnologia/ponto-presencial-frontend/commit/10e807dc82eedd5f7f33db498d49ce36bea18998))
+* save searchParams in the url for back to the page with filters ([#18](https://github.com/IEST-Tecnologia/ponto-presencial-frontend/issues/18)) ([0b5aa33](https://github.com/IEST-Tecnologia/ponto-presencial-frontend/commit/0b5aa3311868dea483ada107251ed87fd8fabfe1))
+
 ## [1.11.2](https://github.com/IEST-Tecnologia/ponto-presencial-frontend/compare/v1.11.1...v1.11.2) (2026-02-11)
 
 
