@@ -27,19 +27,19 @@ const MONTHS = [
 ];
 
 function getMinDate(): Date {
-  const today = new Date("2026-02-23");
+  const today = new Date();
   const day = today.getDate();
   const month = today.getMonth();
   const year = today.getFullYear();
 
   if (day >= 23) {
     // Após o dia 22: mínimo é o dia 20 do mês atual
-    return new Date(year, month, 20);
+    return new Date(year, month, 21);
   } else {
     // Entre o dia 1 e 22: mínimo é o dia 20 do mês anterior
     const prevMonth = month === 0 ? 11 : month - 1;
     const prevYear = month === 0 ? year - 1 : year;
-    return new Date(prevYear, prevMonth, 20);
+    return new Date(prevYear, prevMonth, 21);
   }
 }
 
@@ -48,9 +48,9 @@ export default function SelectableCalendar({
   selectedDate,
   onDateSelect,
 }: CalendarProps) {
-  const today = new Date("2026-02-23");
+  const today = new Date();
   const minDate = getMinDate();
-  const [currentDate, setCurrentDate] = useState(new Date("2026-02-23"));
+  const [currentDate, setCurrentDate] = useState(new Date());
 
   const year = currentDate.getFullYear();
   const month = currentDate.getMonth();
@@ -80,7 +80,7 @@ export default function SelectableCalendar({
       today.getMonth(),
       today.getDate(),
     );
-    return date > todayStart || date < minDate;
+    return date >= todayStart || date < minDate;
   };
 
   const recordsByDate = new Map<string, TimeRecord[]>();
