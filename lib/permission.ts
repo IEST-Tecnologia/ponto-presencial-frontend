@@ -15,34 +15,39 @@ export const verifyUserPermission = async (page: string): Promise<boolean> => {
   const access_token = (await cookies()).get("access_token")?.value;
 
   if (keycloak_id && keycloak_url && keycloak_realm && access_token) {
-    const body = new URLSearchParams({
-      grant_type: "urn:ietf:params:oauth:grant-type:uma-ticket",
-      permission: `${page}`,
-      audience: keycloak_id,
-      response_mode: "decision",
-    });
+    try {
+      const body = new URLSearchParams({
+        grant_type: "urn:ietf:params:oauth:grant-type:uma-ticket",
+        permission: `${page}`,
+        audience: keycloak_id,
+        response_mode: "decision",
+      });
 
-    const res = await fetch(
-      `${keycloak_url}/realms/${keycloak_realm}/protocol/openid-connect/token`,
-      {
-        method: "POST",
-        body,
-        headers: {
-          Authorization: `Bearer ${access_token}`,
-        },
-      }
-    );
-
-    if (!res.ok) {
-      console.error(
-        `erro na verificação de permissão para ${page}: ` + res.statusText
+      const res = await fetch(
+        `${keycloak_url}/realms/${keycloak_realm}/protocol/openid-connect/token`,
+        {
+          method: "POST",
+          body,
+          headers: {
+            Authorization: `Bearer ${access_token}`,
+          },
+        }
       );
+
+      if (!res.ok) {
+        console.error(
+          `erro na verificação de permissão para ${page}: ` + res.statusText
+        );
+        return false;
+      }
+
+      const json = await res.json();
+
+      return json.result;
+    } catch (error) {
+      console.error(`erro inesperado na verificação de permissão para ${page}:`, error);
       return false;
     }
-
-    const json = await res.json();
-
-    return json.result;
   } else {
     return false;
   }

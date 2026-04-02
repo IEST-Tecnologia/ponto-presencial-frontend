@@ -75,7 +75,6 @@ async function getUserIp(): Promise<string | null> {
 
       const response = await fetch(service.url, {
         signal: controller.signal,
-        cache: "no-store",
       });
 
       clearTimeout(timeoutId);
@@ -104,7 +103,7 @@ async function getUserIp(): Promise<string | null> {
 export async function validateLocation(
   lat: number,
   long: number,
-  accuracy: number
+  accuracy: number,
 ): Promise<ValidResponse | null> {
   // Fetch user IP from external services
   const ip = await getUserIp();
@@ -119,7 +118,7 @@ export async function validateLocation(
   const response = await apiFetch<ValidResponse>(
     "/timerecords/validate-location",
     { method: "POST", body: JSON.stringify(payload) },
-    "Failed to validate location"
+    "Failed to validate location",
   );
 
   if (!response.valid) {
@@ -133,7 +132,7 @@ export async function fetchAllTimeRecords(): Promise<TimeRecord[]> {
   const response = await apiFetch<PaginatedResponse<TimeRecordDTO>>(
     "/timerecords",
     { method: "GET" },
-    "Failed to fetch records"
+    "Failed to fetch records",
   );
 
   if (!response.data?.length) {
@@ -145,7 +144,7 @@ export async function fetchAllTimeRecords(): Promise<TimeRecord[]> {
 
 export async function createTimeRecord(
   coordinates: Coordinates,
-  officeId: string
+  officeId: string,
 ): Promise<TimeRecord> {
   const ip = await getUserIp();
 
@@ -164,7 +163,7 @@ export async function createTimeRecord(
       method: "POST",
       body: JSON.stringify(payload),
     },
-    "Failed to create record"
+    "Failed to create record",
   );
 
   return dtoToTimeRecord(data);
@@ -176,7 +175,7 @@ export async function hasRecordToday(): Promise<boolean> {
   const response = await apiFetch<AttendanceResponse>(
     `/timerecords/check-attendance?date=${todayStr}`,
     { method: "GET" },
-    "Failed to check today's records"
+    "Failed to check today's records",
   );
 
   if (!response) {

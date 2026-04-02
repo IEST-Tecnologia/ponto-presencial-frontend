@@ -35,7 +35,7 @@ async function getAuthHeaders(): Promise<HeadersInit> {
 
 async function handleApiError(
   response: Response,
-  operation: string
+  operation: string,
 ): Promise<never> {
   let errorMessage = response.statusText;
 
@@ -63,7 +63,7 @@ async function handleApiError(
 export async function apiFetch<T>(
   endpoint: string,
   options: RequestInit,
-  operation: string
+  operation: string,
 ): Promise<T> {
   if (!API_URL) {
     throw new Error("Backend URL not configured");
@@ -74,7 +74,6 @@ export async function apiFetch<T>(
   const response = await fetch(url, {
     ...options,
     headers: { ...headers, ...options.headers },
-    cache: "no-store",
   });
 
   if (!response.ok) {

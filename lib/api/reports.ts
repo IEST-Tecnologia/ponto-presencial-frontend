@@ -29,7 +29,7 @@ export async function downloadAttendanceReport(
   startDate: string,
   endDate: string,
   company: string,
-  users?: string[]
+  users?: string[],
 ): Promise<{
   success: boolean;
   data?: Blob;
@@ -47,7 +47,6 @@ export async function downloadAttendanceReport(
     const response = await fetch(url, {
       method: "POST",
       headers: headers,
-      cache: "no-store",
       body: JSON.stringify({
         startDate,
         endDate,
