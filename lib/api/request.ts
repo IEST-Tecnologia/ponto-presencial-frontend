@@ -102,30 +102,50 @@ interface FilterProps {
   startDate?: string;
   endDate?: string;
   departments?: string[];
+  status?: string;
+  page?: string;
+}
+
+export interface StatusCounts {
+  all: number;
+  pending: number;
+  approved: number;
+  rejected: number;
+}
+
+export interface PaginatedRequests {
+  data: Request[];
+  count: number;
+  page: number;
+  pageSize: number;
+  statusCounts: StatusCounts;
 }
 
 export async function GetGroupRequests(
   filters?: FilterProps,
-): Promise<Request[]> {
+): Promise<PaginatedRequests> {
   const params = new URLSearchParams();
+  params.set("pageSize", "5");
 
   if (filters?.name) params.set("name", filters.name);
   if (filters?.startDate) params.set("startDate", filters.startDate);
   if (filters?.endDate) params.set("endDate", filters.endDate);
   if (filters?.departments?.length)
     params.set("departments", filters.departments.join(","));
+  if (filters?.status && filters.status !== "all")
+    params.set("status", filters.status);
+  if (filters?.page) params.set("page", filters.page);
 
-  const queryString = params.toString();
-  const url = `/requests/list/group${queryString ? `?${queryString}` : ""}`;
+  const url = `/requests/list/group?${params.toString()}`;
 
-  const response = await apiFetch<Request[]>(
+  const response = await apiFetch<PaginatedRequests>(
     url,
     { method: "GET" },
     "Failed to get requests",
   );
 
   if (!response) {
-    return [];
+    return { data: [], count: 0, page: 1, pageSize: 5, statusCounts: { all: 0, pending: 0, approved: 0, rejected: 0 } };
   }
 
   return response;

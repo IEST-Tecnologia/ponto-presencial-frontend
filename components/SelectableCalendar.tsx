@@ -27,8 +27,20 @@ const MONTHS = [
 ];
 
 function getMinDate(): Date {
-  const today = new Date();
-  return new Date(today.getFullYear(), today.getMonth() - 3, 1);
+  const today = new Date("2026-02-23");
+  const day = today.getDate();
+  const month = today.getMonth();
+  const year = today.getFullYear();
+
+  if (day >= 23) {
+    // Após o dia 22: mínimo é o dia 20 do mês atual
+    return new Date(year, month, 20);
+  } else {
+    // Entre o dia 1 e 22: mínimo é o dia 20 do mês anterior
+    const prevMonth = month === 0 ? 11 : month - 1;
+    const prevYear = month === 0 ? year - 1 : year;
+    return new Date(prevYear, prevMonth, 20);
+  }
 }
 
 export default function SelectableCalendar({
@@ -36,9 +48,9 @@ export default function SelectableCalendar({
   selectedDate,
   onDateSelect,
 }: CalendarProps) {
-  const today = new Date();
+  const today = new Date("2026-02-23");
   const minDate = getMinDate();
-  const [currentDate, setCurrentDate] = useState(new Date());
+  const [currentDate, setCurrentDate] = useState(new Date("2026-02-23"));
 
   const year = currentDate.getFullYear();
   const month = currentDate.getMonth();
@@ -51,7 +63,9 @@ export default function SelectableCalendar({
 
   const canGoPrevMonth = () => {
     const prevMonthDate = new Date(year, month - 1, 1);
-    return prevMonthDate >= new Date(minDate.getFullYear(), minDate.getMonth(), 1);
+    return (
+      prevMonthDate >= new Date(minDate.getFullYear(), minDate.getMonth(), 1)
+    );
   };
 
   const canGoNextMonth = () => {
@@ -61,7 +75,11 @@ export default function SelectableCalendar({
 
   const isDateDisabled = (day: number, m: number, y: number): boolean => {
     const date = new Date(y, m, day);
-    const todayStart = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+    const todayStart = new Date(
+      today.getFullYear(),
+      today.getMonth(),
+      today.getDate(),
+    );
     return date > todayStart || date < minDate;
   };
 
@@ -130,10 +148,10 @@ export default function SelectableCalendar({
   const getRecordsForDay = (
     day: number,
     m: number,
-    y: number
+    y: number,
   ): TimeRecord[] => {
     const dateKey = `${y}-${String(m + 1).padStart(2, "0")}-${String(
-      day
+      day,
     ).padStart(2, "0")}`;
     return recordsByDate.get(dateKey) || [];
   };
@@ -151,7 +169,7 @@ export default function SelectableCalendar({
     day: number,
     m: number,
     y: number,
-    hasRecords: boolean
+    hasRecords: boolean,
   ) => {
     if (hasRecords || isDateDisabled(day, m, y)) return;
     // Cria a data com horário do meio-dia para evitar problemas de timezone
@@ -238,12 +256,12 @@ export default function SelectableCalendar({
                 isDisabled
                   ? "text-gray-300 cursor-not-allowed"
                   : isSelectedDay
-                  ? "bg-primary text-white font-bold ring-2 ring-primary ring-offset-2"
-                  : hasRecords
-                  ? "bg-primary/20 text-primary cursor-not-allowed"
-                  : isTodayDay
-                  ? "bg-primary/10 text-gray-600 font-bold ring-2 ring-primary ring-inset hover:bg-primary/20"
-                  : "text-gray-700 hover:bg-gray-100 cursor-pointer"
+                    ? "bg-primary text-white font-bold ring-2 ring-primary ring-offset-2"
+                    : hasRecords
+                      ? "bg-primary/20 text-primary cursor-not-allowed"
+                      : isTodayDay
+                        ? "bg-primary/10 text-gray-600 font-bold ring-2 ring-primary ring-inset hover:bg-primary/20"
+                        : "text-gray-700 hover:bg-gray-100 cursor-pointer"
               }`}
             >
               {day}

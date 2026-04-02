@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState, useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Request } from "@/lib/api/request";
+import { Request, StatusCounts } from "@/lib/api/request";
 import { formatUTCDateToBrasilia } from "@/utils/date";
 import TextInput from "@/components/TextInput";
 import DateRangePicker from "@/components/DateRangePicker";
@@ -10,23 +10,28 @@ import { Params } from "./page";
 
 type TabType = "all" | "pending" | "approved" | "rejected";
 
-const ITEMS_PER_PAGE = 5;
-
 interface RequestsListProps {
   initialRequests: Request[];
+  count: number;
+  page: number;
+  pageSize: number;
+  statusCounts: StatusCounts;
   availableDepartments: string[];
   params: Params;
 }
 
 export default function RequestsList({
   initialRequests,
+  count,
+  page,
+  pageSize,
+  statusCounts,
   availableDepartments,
   params,
 }: RequestsListProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [activeTab, setActiveTab] = useState<TabType>("all");
-  const [currentPage, setCurrentPage] = useState(0);
+  const activeTab = (params.status as TabType) || "all";
   const [nameFilter, setNameFilter] = useState(searchParams.get("name") || "");
   const [startDate, setStartDate] = useState(
     searchParams.get("startDate") || "",
@@ -110,8 +115,8 @@ export default function RequestsList({
       params.set("departments", selectedDepartments.join(","));
     }
 
+    params.delete("page");
     router.push(`/solicitacoes/aprovar?${params.toString()}`);
-    setCurrentPage(0);
     setIsDatePickerOpen(false);
     setIsDepartmentPickerOpen(false);
   };
@@ -122,7 +127,6 @@ export default function RequestsList({
     setEndDate("");
     setSelectedDepartments([]);
     router.push("/solicitacoes/aprovar");
-    setCurrentPage(0);
     setIsDatePickerOpen(false);
     setIsDepartmentPickerOpen(false);
   };
@@ -175,15 +179,25 @@ export default function RequestsList({
     return colors[status];
   };
 
-  const filteredRequests =
-    activeTab === "all"
-      ? requests
-      : requests.filter((request) => request.status === activeTab);
+  const totalPages = Math.ceil(count / pageSize);
+  const currentItems = requests;
 
-  const totalPages = Math.ceil(filteredRequests.length / ITEMS_PER_PAGE);
-  const startIndex = currentPage * ITEMS_PER_PAGE;
-  const endIndex = startIndex + ITEMS_PER_PAGE;
-  const currentItems = filteredRequests.slice(startIndex, endIndex);
+  const handlePageChange = (newPage: number) => {
+    const p = new URLSearchParams(searchParams.toString());
+    p.set("page", String(newPage));
+    router.push(`/solicitacoes/aprovar?${p.toString()}`);
+  };
+
+  const handleTabChange = (tab: TabType) => {
+    const p = new URLSearchParams(searchParams.toString());
+    if (tab === "all") {
+      p.delete("status");
+    } else {
+      p.set("status", tab);
+    }
+    p.delete("page");
+    router.push(`/solicitacoes/aprovar?${p.toString()}`);
+  };
 
   const handleRequestClick = (requestId: string) => {
     router.push(
@@ -192,22 +206,10 @@ export default function RequestsList({
   };
 
   const tabs = [
-    { id: "all" as TabType, label: "Todas", count: requests.length },
-    {
-      id: "pending" as TabType,
-      label: "Pendentes",
-      count: requests.filter((r) => r.status === "pending").length,
-    },
-    {
-      id: "approved" as TabType,
-      label: "Aprovadas",
-      count: requests.filter((r) => r.status === "approved").length,
-    },
-    {
-      id: "rejected" as TabType,
-      label: "Rejeitadas",
-      count: requests.filter((r) => r.status === "rejected").length,
-    },
+    { id: "all" as TabType, label: "Todas", count: statusCounts.all },
+    { id: "pending" as TabType, label: "Pendentes", count: statusCounts.pending },
+    { id: "approved" as TabType, label: "Aprovadas", count: statusCounts.approved },
+    { id: "rejected" as TabType, label: "Rejeitadas", count: statusCounts.rejected },
   ];
 
   return (
@@ -226,10 +228,7 @@ export default function RequestsList({
           {tabs.map((tab) => (
             <button
               key={tab.id}
-              onClick={() => {
-                setActiveTab(tab.id);
-                setCurrentPage(0);
-              }}
+              onClick={() => handleTabChange(tab.id)}
               className={`flex-1 min-w-[120px] px-4 py-4 text-sm font-medium transition-colors border-b-2 ${
                 activeTab === tab.id
                   ? "border-primary text-primary bg-primary/5"
@@ -545,10 +544,10 @@ export default function RequestsList({
         <div className="mt-4 bg-white rounded-lg shadow-md border border-gray-200 px-4 py-4 lg:px-6">
           <div className="flex justify-center items-center gap-2 sm:gap-4">
             <button
-              onClick={() => setCurrentPage((prev) => Math.max(0, prev - 1))}
-              disabled={currentPage === 0}
+              onClick={() => handlePageChange(page - 1)}
+              disabled={page <= 1}
               className={`px-3 sm:px-4 py-2 text-sm font-medium rounded-md transition-colors ${
-                currentPage === 0
+                page <= 1
                   ? "bg-gray-200 text-gray-400 cursor-not-allowed"
                   : "bg-primary text-white hover:bg-primary/90 shadow-sm"
               }`}
@@ -556,15 +555,13 @@ export default function RequestsList({
               Anterior
             </button>
             <span className="text-xs sm:text-sm text-gray-600 font-medium whitespace-nowrap">
-              Página {currentPage + 1} de {totalPages}
+              Página {page} de {totalPages}
             </span>
             <button
-              onClick={() =>
-                setCurrentPage((prev) => Math.min(totalPages - 1, prev + 1))
-              }
-              disabled={currentPage === totalPages - 1}
+              onClick={() => handlePageChange(page + 1)}
+              disabled={page >= totalPages}
               className={`px-3 sm:px-4 py-2 text-sm font-medium rounded-md transition-colors ${
-                currentPage === totalPages - 1
+                page >= totalPages
                   ? "bg-gray-200 text-gray-400 cursor-not-allowed"
                   : "bg-primary text-white hover:bg-primary/90 shadow-sm"
               }`}
