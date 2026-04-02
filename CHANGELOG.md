@@ -1,3 +1,11 @@
+# [1.14.0](https://github.com/IEST-Tecnologia/ponto-presencial-frontend/compare/v1.13.0...v1.14.0) (2026-04-02)
+
+
+### Features
+
+* improve request pagination ([c1b4495](https://github.com/IEST-Tecnologia/ponto-presencial-frontend/commit/c1b4495f52691954f52b3ae0034ab515bd637a75))
+* improve request pagination ([#22](https://github.com/IEST-Tecnologia/ponto-presencial-frontend/issues/22)) ([c7ce82b](https://github.com/IEST-Tecnologia/ponto-presencial-frontend/commit/c7ce82b56f419e8d7b9e4b7a4c08a07c6b69a7ca))
+
 # [1.13.0](https://github.com/IEST-Tecnologia/ponto-presencial-frontend/compare/v1.12.0...v1.13.0) (2026-03-19)
 
 
