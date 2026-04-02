@@ -207,9 +207,21 @@ export default function RequestsList({
 
   const tabs = [
     { id: "all" as TabType, label: "Todas", count: statusCounts.all },
-    { id: "pending" as TabType, label: "Pendentes", count: statusCounts.pending },
-    { id: "approved" as TabType, label: "Aprovadas", count: statusCounts.approved },
-    { id: "rejected" as TabType, label: "Rejeitadas", count: statusCounts.rejected },
+    {
+      id: "pending" as TabType,
+      label: "Pendentes",
+      count: statusCounts.pending,
+    },
+    {
+      id: "approved" as TabType,
+      label: "Aprovadas",
+      count: statusCounts.approved,
+    },
+    {
+      id: "rejected" as TabType,
+      label: "Rejeitadas",
+      count: statusCounts.rejected,
+    },
   ];
 
   return (
@@ -353,7 +365,7 @@ export default function RequestsList({
                     </th>
                     <th
                       scope="col"
-                      className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider w-40"
+                      className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider w-32"
                     >
                       Data do ajuste
                     </th>
@@ -377,13 +389,13 @@ export default function RequestsList({
                     </th>
                     <th
                       scope="col"
-                      className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider w-40"
+                      className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider w-42"
                     >
                       Aprovado por
                     </th>
                     <th
                       scope="col"
-                      className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider w-40"
+                      className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider w-32"
                     >
                       Data conclusão
                     </th>
@@ -394,22 +406,28 @@ export default function RequestsList({
                     <tr
                       key={solicitacao.id}
                       onClick={() => handleRequestClick(solicitacao.id)}
-                      className="hover:bg-gray-50 transition-colors cursor-pointer"
+                      className="hover:bg-gray-50 transition-colors cursor-pointer h-18.5"
                     >
-                      <td className="px-6 py-4 text-gray-500 font-medium text-sm">
-                        {solicitacao.company
-                          ? `${solicitacao.user || solicitacao.user_id} - ${
-                              solicitacao.company
-                            }`
-                          : solicitacao.user}
+                      <td className="px-6 py-4 text-gray-500 font-medium text-sm line-clamp-2 h-18.5 align-middle">
+                        <p className="w-full h-full flex items-center">
+                          {solicitacao.company
+                            ? `${solicitacao.user || solicitacao.user_id} - ${
+                                solicitacao.company
+                              }`
+                            : solicitacao.user}
+                        </p>
                       </td>
-                      <td className="px-6 py-4 text-gray-500 font-medium text-sm whitespace-nowrap">
-                        {formatUTCDateToBrasilia(solicitacao.request_date)}
+                      <td className="px-6 py-4 text-gray-500 font-medium text-sm whitespace-nowrap h-18.5 align-middle">
+                        <p className="w-full h-full flex items-center">
+                          {formatUTCDateToBrasilia(solicitacao.request_date)}
+                        </p>
                       </td>
                       <td className="px-6 py-4 text-gray-600 truncate max-w-xs">
-                        {solicitacao.reason}
+                        <p className="w-full h-full flex items-center">
+                          {solicitacao.reason}
+                        </p>
                       </td>
-                      <td className="px-6 py-4">
+                      <td className="px-6 py-4 h-18.5 align-middle">
                         <div className="flex items-center gap-2">
                           <div
                             className={`rounded-full h-2 w-2 shrink-0 ${getStatusColorClass(
@@ -421,28 +439,34 @@ export default function RequestsList({
                           </span>
                         </div>
                       </td>
-                      <td className="px-6 py-4 text-gray-600 whitespace-nowrap">
-                        {new Date(solicitacao.created_at).toLocaleDateString(
-                          "pt-BR",
-                        )}
+                      <td className="px-6 py-4 text-gray-600 whitespace-nowrap h-18.5 align-middle">
+                        <p className="w-full h-full flex items-center">
+                          {new Date(solicitacao.created_at).toLocaleDateString(
+                            "pt-BR",
+                          )}
+                        </p>
                       </td>
-                      <td className="px-6 py-4 text-gray-600">
-                        {solicitacao.approver || (
-                          <span className="text-gray-400 italic">
-                            Aguardando
-                          </span>
-                        )}
+                      <td className="px-6 py-4 text-gray-600 h-18.5 align-middle">
+                        <p className="w-full h-full flex items-center">
+                          {solicitacao.approver || (
+                            <span className="text-gray-400 italic">
+                              Aguardando
+                            </span>
+                          )}
+                        </p>
                       </td>
-                      <td className="px-6 py-4 text-gray-600">
-                        {solicitacao.approver ? (
-                          <span>
-                            {new Date(
-                              solicitacao.approved_at,
-                            ).toLocaleDateString("pt-BR")}
-                          </span>
-                        ) : (
-                          <span className="text-gray-400 italic">-</span>
-                        )}
+                      <td className="px-4 py-4 text-gray-600 line-clamp-2 h-18.5 align-middle">
+                        <p className="w-full h-full flex items-center">
+                          {solicitacao.approver ? (
+                            <span>
+                              {new Date(
+                                solicitacao.approved_at,
+                              ).toLocaleDateString("pt-BR")}
+                            </span>
+                          ) : (
+                            <span className="text-gray-400 italic">-</span>
+                          )}
+                        </p>
                       </td>
                     </tr>
                   ))}
