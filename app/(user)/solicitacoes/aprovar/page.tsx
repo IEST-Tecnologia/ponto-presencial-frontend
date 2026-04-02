@@ -6,6 +6,8 @@ export interface Params {
   startDate?: string;
   endDate?: string;
   departments?: string;
+  status?: string;
+  page?: string;
 }
 
 export default async function Page({
@@ -13,13 +15,15 @@ export default async function Page({
 }: {
   searchParams: Promise<Params>;
 }) {
-  const { name, startDate, endDate, departments } = await searchParams;
+  const { name, startDate, endDate, departments, status, page } = await searchParams;
 
   const params: Params = {
     name,
     startDate,
     endDate,
     departments,
+    status,
+    page,
   };
 
   const { data: availableDepartments } = await GetDepartments();
@@ -29,16 +33,22 @@ export default async function Page({
       ? departments.split(",").filter(Boolean)
       : [];
 
-  const requests = await GetGroupRequests({
+  const { data, count, page: currentPage, pageSize, statusCounts } = await GetGroupRequests({
     ...(name && { name }),
     ...(startDate && { startDate }),
     ...(endDate && { endDate }),
     ...(selectedDepartments.length && { departments: selectedDepartments }),
+    ...(status && { status }),
+    ...(page && { page }),
   });
 
   return (
     <RequestsList
-      initialRequests={requests}
+      initialRequests={data}
+      count={count}
+      page={currentPage}
+      pageSize={pageSize}
+      statusCounts={statusCounts}
       availableDepartments={availableDepartments ?? []}
       params={params}
     />
