@@ -32,7 +32,7 @@ export default function Form({ records }: { records: TimeRecord[] }) {
     startTransition(async () => {
       try {
         const dateString = `${selectedDate.getFullYear()}-${String(
-          selectedDate.getMonth() + 1
+          selectedDate.getMonth() + 1,
         ).padStart(2, "0")}-${String(selectedDate.getDate()).padStart(2, "0")}`;
 
         const res = await CreateRequest(reason, dateString);
@@ -76,6 +76,90 @@ export default function Form({ records }: { records: TimeRecord[] }) {
           <p className="text-xs text-gray-500 mb-3">
             Selecione um dia em que você não registrou ponto
           </p>
+          <div className="w-full mb-3">
+            <div className="flex items-center gap-2 mb-4">
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                <circle
+                  cx="9"
+                  cy="9"
+                  r="8.5"
+                  stroke="#93C5FD"
+                  strokeWidth="0.5"
+                  fill="#EFF6FF"
+                />
+                <text
+                  x="9"
+                  y="13"
+                  textAnchor="middle"
+                  fontSize="11"
+                  fontWeight="500"
+                  fill="#1D4ED8"
+                >
+                  i
+                </text>
+              </svg>
+              <span className="text-sm font-semibold text-gray-800">
+                Prazo para solicitação de ajuste de ponto
+              </span>
+            </div>
+
+            <div className="flex gap-3 mb-3">
+              <div className="flex-1 bg-blue-50 border border-blue-200 rounded-lg p-3">
+                <p className="text-xs font-semibold text-blue-900 uppercase tracking-wide mb-1">
+                  Período de competência
+                </p>
+                <p className="text-xs text-gray-500 leading-relaxed">
+                  Dia <strong className="font-medium">21</strong> do mês
+                  anterior até o dia <strong className="font-medium">20</strong>{" "}
+                  do mês atual
+                </p>
+              </div>
+
+              <div className="flex-1 bg-blue-50 border border-blue-200 rounded-lg p-3">
+                <p className="text-xs font-semibold text-blue-900 uppercase tracking-wide mb-1">
+                  Prazo para solicitar ajuste
+                </p>
+                <p className="text-xs text-gray-500 leading-relaxed">
+                  Até o dia <strong className="font-medium">22</strong> do mês
+                  atual, pelo sistema
+                </p>
+              </div>
+            </div>
+
+            <div className="flex gap-2 items-start bg-blue-50 border border-blue-200 rounded-lg p-3">
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 16 16"
+                fill="none"
+                className="shrink-0 mt-0.5"
+              >
+                <path
+                  d="M8 1.5L15 14H1L8 1.5Z"
+                  stroke="#D97706"
+                  strokeWidth="1"
+                  fill="#FEF9C3"
+                  strokeLinejoin="round"
+                />
+                <text
+                  x="8"
+                  y="12"
+                  textAnchor="middle"
+                  fontSize="9"
+                  fontWeight="600"
+                  fill="#92400E"
+                >
+                  !
+                </text>
+              </svg>
+              <p className="text-xs text-gray-500 leading-relaxed">
+                Após o dia <strong className="font-medium">22</strong>,
+                solicitações pelo sistema não são mais aceitas para o período
+                atual. Nesse caso, entre em contato com o DP por e-mail para
+                tratar o ajuste no próximo período.
+              </p>
+            </div>
+          </div>
           <SelectableCalendar
             records={records}
             selectedDate={selectedDate}
