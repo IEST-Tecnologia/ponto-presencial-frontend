@@ -153,21 +153,9 @@ export default async function Page({
         </p>
       </div>
 
-      {isPending && (
-        <div className="w-full pt-4">
-          <ApprovalActions requestId={requestId} />
-        </div>
-      )}
-
-      {!isPending && (
-        <div className="w-full bg-blue-50 border border-blue-200 rounded-lg p-4">
-          <p className="text-sm text-blue-800">
-            {isApproved
-              ? "Esta solicitação foi aprovada e não pode mais ser modificada."
-              : "Esta solicitação foi rejeitada e não pode mais ser modificada."}
-          </p>
-        </div>
-      )}
+      <div className="w-full pt-4">
+        <ApprovalActions requestId={requestId} status={request.status} />
+      </div>
     </div>
   );
 }
