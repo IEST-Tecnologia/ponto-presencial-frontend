@@ -1,3 +1,11 @@
+# [1.15.0](https://github.com/IEST-Tecnologia/ponto-presencial-frontend/compare/v1.14.0...v1.15.0) (2026-05-14)
+
+
+### Features
+
+* aprove or reject even if status is not pending ([799cfff](https://github.com/IEST-Tecnologia/ponto-presencial-frontend/commit/799cfffed9c6acf4bf3cfab4b21f9defbad88e7a))
+* aprove or reject even if status is not pending ([#25](https://github.com/IEST-Tecnologia/ponto-presencial-frontend/issues/25)) ([ae04c9f](https://github.com/IEST-Tecnologia/ponto-presencial-frontend/commit/ae04c9f18a0746ed7257faa7279ea95d6c1858e1))
+
 # [1.14.0](https://github.com/IEST-Tecnologia/ponto-presencial-frontend/compare/v1.13.0...v1.14.0) (2026-04-02)
 
 
